@@ -1,6 +1,7 @@
-import { DynamicForm } from "@/domains/forms/containers/DynamicForm";
+import { DynamicFormFields } from "@/domains/forms/containers/DynamicFormFields";
+
 const Page = async () => {
-  return <DynamicForm />;
+  return <DynamicFormFields />;
 };
 
 export default Page;

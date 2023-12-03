@@ -2,12 +2,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useRef, useState } from "react";
-import { QuestionItem } from "../containers/DynamicForm";
+
 import { Edit, Trash } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { convertStringToSlug, isLabelValid } from "../utils";
 import { FormAddOptionButton } from "./FormAddOptionButton";
-import { Option } from "@/server/types/DynamicForm";
+import { Option, QuestionItem } from "@/server/types/DynamicForm";
 
 type FormRadioGroupProps = {
   question?: Partial<QuestionItem>;

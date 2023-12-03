@@ -3,8 +3,8 @@ import { Input } from "@/components/ui/input";
 import { FormQuestionType } from "./FormQuestionType";
 import { FormQuestionInput } from "./FormQuestionInput";
 
-import { QuestionItem } from "../containers/DynamicForm";
 import { Trash } from "lucide-react";
+import { QuestionItem } from "@/server/types/DynamicForm";
 
 type FormQuestionProps = {
   question: QuestionItem;

@@ -16,6 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useState } from "react";
+import { QuestionType } from "@/server/types/DynamicForm";
 
 const questionTypes = [
   {

@@ -1,14 +1,14 @@
 "use client";
 import { Checkbox } from "@/components/ui/checkbox";
-import { QuestionItem } from "../containers/DynamicForm";
 import { Input } from "@/components/ui/input";
 import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Option } from "./FormRadioGroup";
+
 import { Label } from "@/components/ui/label";
 import { Edit, Trash } from "lucide-react";
 import { convertStringToSlug, isLabelValid } from "../utils";
 import { FormAddOptionButton } from "./FormAddOptionButton";
+import { Option, QuestionItem } from "@/server/types/DynamicForm";
 
 type FormCheckBoxesProps = {
   question?: Partial<QuestionItem>;

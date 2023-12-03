@@ -1,4 +1,3 @@
-
 type QuestionType = "text" | "multiple-choice" | "checkboxes";
 
 type Option = {
