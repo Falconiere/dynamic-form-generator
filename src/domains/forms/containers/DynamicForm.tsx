@@ -4,13 +4,10 @@ import { FormHeader } from "../components/FormHeader";
 import { useState } from "react";
 import { FormQuestion } from "../components/FormQuestion";
 import { Button } from "@/components/ui/button";
-import { QuestionType } from "../components/FormQuestionType";
-import { MultipleOption } from "../components/FormRadioGroup";
 import { v4 as uuidv4 } from "uuid";
-import {
-  Session,
-  createClientComponentClient,
-} from "@supabase/auth-helpers-nextjs";
+import { MultipleOption, QuestionType } from "@/server/types/DynamicForm";
+import { http } from "@/lib/http";
+
 // questions i want to have in this version of the form:
 // - question
 // - question type [text, multiple choice, checkbox]
@@ -30,13 +27,11 @@ type Form = {
   description: string;
   questions: QuestionItem[];
 };
+
 type DynamicFormProps = {
-  session: Session | null;
   form?: Form;
 };
-const DynamicForm = ({ session, form }: DynamicFormProps) => {
-  const supabase = createClientComponentClient();
-  const user = session?.user;
+const DynamicForm = ({ form }: DynamicFormProps) => {
   const [{ title, description, questions }, setForm] = useState<Form>(
     form ?? {
       title: "",
@@ -44,7 +39,6 @@ const DynamicForm = ({ session, form }: DynamicFormProps) => {
       questions: [],
     }
   );
-
   const handleAddQuestion = () => {
     const question: QuestionItem = {
       id: uuidv4(),
@@ -73,22 +67,13 @@ const DynamicForm = ({ session, form }: DynamicFormProps) => {
       return;
     }
 
-    const payload = {
-      title,
-      description,
-      questions,
-      user_id: user?.id,
-    };
-    try {
-      if (form?.id) {
-        await supabase.from("forms").update(payload).eq("id", form.id);
-        return;
-      }
-      await supabase.from("forms").insert(payload);
-    } catch (error) {
-      console.log(error);
+    if (form?.id) {
+      await http.patch(`/api/forms/${form.id}`, form);
+      return;
     }
+    await http.post("/api/forms", form);
   };
+
   return (
     <div className="grid gap-4">
       <FormHeader
@@ -100,7 +85,7 @@ const DynamicForm = ({ session, form }: DynamicFormProps) => {
           setForm((prev) => ({ ...prev, ...value }));
         }}
       />
-      {questions.map((question) => (
+      {questions?.map((question) => (
         <FormQuestion
           key={question.id}
           onChange={handleQuestionChange}

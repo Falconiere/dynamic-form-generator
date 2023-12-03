@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/popover";
 import { useState } from "react";
 
-type QuestionType = "text" | "multiple-choice" | "checkboxes";
 const questionTypes = [
   {
     label: "Text",

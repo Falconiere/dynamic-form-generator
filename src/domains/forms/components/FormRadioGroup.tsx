@@ -7,14 +7,7 @@ import { Edit, Trash } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { convertStringToSlug, isLabelValid } from "../utils";
 import { FormAddOptionButton } from "./FormAddOptionButton";
-
-type Option = {
-  id: string;
-  label: string;
-  isChecked?: boolean;
-};
-
-type MultipleOption = Option[];
+import { Option } from "@/server/types/DynamicForm";
 
 type FormRadioGroupProps = {
   question?: Partial<QuestionItem>;
@@ -121,5 +114,4 @@ function FormRadioGroup({ question, onChange }: FormRadioGroupProps) {
   );
 }
 
-export type { Option, MultipleOption };
 export { FormRadioGroup };
