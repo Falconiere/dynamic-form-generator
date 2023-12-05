@@ -1,6 +1,2 @@
-const Header = () => (
-  <header className="bg-slate-600 text-white">
-    <h1>Header</h1>
-  </header>
-);
+const Header = () => <header className="text-white " />;
 export { Header };

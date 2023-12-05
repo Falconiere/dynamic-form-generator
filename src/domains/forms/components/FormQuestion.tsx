@@ -3,16 +3,22 @@ import { Input } from "@/components/ui/input";
 import { FormQuestionType } from "./FormQuestionType";
 import { FormQuestionInput } from "./FormQuestionInput";
 
-import { Trash } from "lucide-react";
+import { PlusCircle, Trash } from "lucide-react";
 import { QuestionItem } from "@/server/types/DynamicForm";
 
 type FormQuestionProps = {
   question: QuestionItem;
   onChange: (question: Partial<QuestionItem>) => void;
   onDelete: () => void;
+  canDelete?: boolean;
 };
 
-const FormQuestion = ({ question, onChange, onDelete }: FormQuestionProps) => {
+const FormQuestion = ({
+  question,
+  onChange,
+  onDelete,
+  canDelete,
+}: FormQuestionProps) => {
   const { questionType } = question;
   return (
     <Card className="relative">
@@ -44,10 +50,12 @@ const FormQuestion = ({ question, onChange, onDelete }: FormQuestionProps) => {
           }
         />
       </CardContent>
-      <Trash
-        className="w-8 h-8 cursor-pointer absolute right-[-10px] top-[-10px] bg-red-600 rounded-full text-white p-2"
-        onClick={onDelete}
-      />
+      {canDelete ? (
+        <Trash
+          className="w-8 h-8 cursor-pointer absolute right-[-10px] top-[-10px] bg-red-600 rounded-full text-white p-2"
+          onClick={onDelete}
+        />
+      ) : null}
     </Card>
   );
 };

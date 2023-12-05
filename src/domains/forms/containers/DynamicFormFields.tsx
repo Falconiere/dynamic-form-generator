@@ -17,10 +17,15 @@ const DynamicFormFields = ({ form }: DynamicFormProps) => {
     form ?? {
       title: "",
       description: "",
-      questions: [],
+      questions: [
+        {
+          id: uuidv4(),
+          questionType: "text",
+          question: "",
+        },
+      ],
     }
   );
-
   const payload = useMemo(
     () => ({
       ...form,
@@ -30,6 +35,7 @@ const DynamicFormFields = ({ form }: DynamicFormProps) => {
     }),
     [form, title, description, questions]
   );
+
   const handleAddQuestion = () => {
     const question: QuestionItem = {
       id: uuidv4(),
@@ -55,6 +61,7 @@ const DynamicFormFields = ({ form }: DynamicFormProps) => {
 
   return (
     <div className="grid gap-4">
+      <h1 className="text-4xl font-medium">{form ? "Edit" : "Create"} form</h1>
       <FormHeader
         value={{
           title,
@@ -70,16 +77,19 @@ const DynamicFormFields = ({ form }: DynamicFormProps) => {
           onChange={handleQuestionChange}
           question={question}
           onDelete={() => handleOnDelete(question.id)}
+          canDelete={questions.length > 1}
         />
       ))}
-      <div>
-        <Button onClick={handleAddQuestion} type="button">
-          Add question
-        </Button>
-        <Button onClick={() => handleOnSubmit(payload)} type="button">
-          Save
-        </Button>
+      <div className="min-h-[100px] flex items-center justify-center border-primary border-dotted  border-2">
+        <h3>Draggable are</h3>
       </div>
+      <Button
+        onClick={() => handleOnSubmit(payload)}
+        type="button"
+        variant="secondary"
+      >
+        Save
+      </Button>
     </div>
   );
 };
