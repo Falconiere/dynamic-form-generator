@@ -10,7 +10,6 @@ type AuthFormProps = {
 
 const AuthForm = ({ view }: AuthFormProps) => {
   const supabase = createClientComponentClient();
-
   return (
     <div className=" grid grid-cols-2 h-full">
       <div className="bg-black" />

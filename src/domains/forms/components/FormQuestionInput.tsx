@@ -18,7 +18,6 @@ const inputs = ({
       type="text"
       placeholder="Question"
       name="question"
-      defaultValue={question?.text}
       value={question?.text}
       onChange={(e) => {
         onChange({

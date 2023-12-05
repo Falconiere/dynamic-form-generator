@@ -1,5 +1,6 @@
 import { DynamicFormFields } from "@/domains/forms/containers/DynamicFormFields";
-import { getFormById } from "@/server/database/forms/getFormById";
+import { fetchById } from "@/server/database/forms";
+import { DynamicForm } from "@/server/types/DynamicForm";
 
 type PageProps = {
   params: { id: string };
@@ -7,7 +8,7 @@ type PageProps = {
 };
 const Page = async ({ params }: PageProps) => {
   const { id } = params;
-  const form = await getFormById(id);
+  const form = await fetchById<DynamicForm>(id);
   return <DynamicFormFields form={form} />;
 };
 

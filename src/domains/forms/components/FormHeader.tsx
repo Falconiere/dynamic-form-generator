@@ -26,7 +26,6 @@ const FormHeader = ({ value, onChange }: FormHeaderProps) => {
             className="text-3xl font-semibold h-16"
             onChange={handleChange}
             value={value.title}
-            defaultValue={value.title}
           />
         </CardTitle>
         <Input
@@ -35,7 +34,6 @@ const FormHeader = ({ value, onChange }: FormHeaderProps) => {
           name="description"
           onChange={handleChange}
           value={value.description}
-          defaultValue={value.description}
         />
       </CardHeader>
     </Card>

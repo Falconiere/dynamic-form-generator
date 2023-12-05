@@ -1,5 +1,6 @@
 import { Option } from "@/server/types/DynamicForm";
 
+
 const convertStringToSlug = (text: string) => {
   return text
     .toLowerCase()
@@ -25,4 +26,5 @@ const isLabelValid = ({
   );
 };
 
-export { convertStringToSlug, checkIfOption, isLabelValid };
+
+export { convertStringToSlug, checkIfOption, isLabelValid  };

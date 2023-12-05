@@ -1,23 +1,34 @@
 "use client";
 import { FormHeader } from "../components/FormHeader";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FormQuestion } from "../components/FormQuestion";
 import { Button } from "@/components/ui/button";
 import { v4 as uuidv4 } from "uuid";
 import { DynamicForm, QuestionItem } from "@/server/types/DynamicForm";
-import { http } from "@/lib/http";
+import { useDynamicForm } from "../hooks/useDynamicForm";
 
 type DynamicFormProps = {
   form?: DynamicForm;
 };
 
 const DynamicFormFields = ({ form }: DynamicFormProps) => {
+  const { handleOnSubmit } = useDynamicForm();
   const [{ title, description, questions }, setForm] = useState<DynamicForm>(
     form ?? {
       title: "",
       description: "",
       questions: [],
     }
+  );
+
+  const payload = useMemo(
+    () => ({
+      ...form,
+      title,
+      description,
+      questions,
+    }),
+    [form, title, description, questions]
   );
   const handleAddQuestion = () => {
     const question: QuestionItem = {
@@ -40,17 +51,6 @@ const DynamicFormFields = ({ form }: DynamicFormProps) => {
     const newQuestions = [...questions];
     newQuestions.splice(index, 1);
     setForm((prev) => ({ ...prev, questions: newQuestions }));
-  };
-
-  const handleSubmit = async () => {
-    if (questions.length === 0) {
-      return;
-    }
-    if (form?.id) {
-      await http.patch(`/api/forms/${form.id}`, form);
-      return;
-    }
-    await http.post("/api/forms", form);
   };
 
   return (
@@ -76,7 +76,7 @@ const DynamicFormFields = ({ form }: DynamicFormProps) => {
         <Button onClick={handleAddQuestion} type="button">
           Add question
         </Button>
-        <Button onClick={handleSubmit} type="button">
+        <Button onClick={() => handleOnSubmit(payload)} type="button">
           Save
         </Button>
       </div>
