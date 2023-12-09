@@ -1,5 +1,5 @@
 import { PostgrestError } from "@supabase/supabase-js";
-import { DynamicForm } from "./DynamicForm";
+import { Form } from "./Form";
 
-type FormResponse = DynamicForm | DynamicForm[] | PostgrestError | null
+type FormResponse = Form | Form[] | PostgrestError | null
 export type { FormResponse }

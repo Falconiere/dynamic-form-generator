@@ -1,4 +1,4 @@
-import { Option } from "@/server/types/DynamicForm";
+import { Option } from "@/server/types/Form";
 
 
 const convertStringToSlug = (text: string) => {

@@ -16,28 +16,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useState } from "react";
-import { QuestionType } from "@/server/types/DynamicForm";
+import { FormElementType } from "@/server/types/Form";
+import { elements } from "@/server/utils/constants";
 
-const questionTypes = [
-  {
-    label: "Text",
-    value: "text",
-  },
-  {
-    label: "Multiple choice",
-    value: "multiple-choice",
-  },
-  {
-    label: "Checkboxes",
-    value: "checkboxes",
-  },
-] as Array<{
-  label: string;
-  value: QuestionType;
-}>;
 type FormQuestionTypeProps = {
-  value?: QuestionType;
-  onChange: (value: QuestionType) => void;
+  value?: FormElementType;
+  onChange: (value: FormElementType) => void;
 };
 
 function FormQuestionType({ value, onChange }: FormQuestionTypeProps) {
@@ -53,7 +37,7 @@ function FormQuestionType({ value, onChange }: FormQuestionTypeProps) {
           className="w-[200px] justify-between"
         >
           {value
-            ? questionTypes.find((questionType) => questionType.value === value)
+            ? elements.find((questionType) => questionType.value === value)
                 ?.label
             : "Select question type..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -64,12 +48,12 @@ function FormQuestionType({ value, onChange }: FormQuestionTypeProps) {
           <CommandInput placeholder="Search question type..." />
           <CommandEmpty>No option found.</CommandEmpty>
           <CommandGroup>
-            {questionTypes.map((questionType) => (
+            {elements.map((questionType) => (
               <CommandItem
                 key={questionType.value}
                 value={questionType.value}
                 onSelect={(currentValue) => {
-                  onChange(currentValue as QuestionType);
+                  onChange(currentValue as FormElementType);
                   setOpen(false);
                 }}
               >
@@ -88,5 +72,4 @@ function FormQuestionType({ value, onChange }: FormQuestionTypeProps) {
     </Popover>
   );
 }
-export type { QuestionType };
 export { FormQuestionType };

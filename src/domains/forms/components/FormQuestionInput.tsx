@@ -1,21 +1,34 @@
 import { Input } from "@/components/ui/input";
-import { QuestionType } from "./FormQuestionType";
 import { FormRadioGroup } from "./FormRadioGroup";
 import { FormCheckBoxes } from "./FormCheckBoxes";
-import { QuestionItem } from "@/server/types/DynamicForm";
+import { FormElement, FormElementType } from "@/server/types/Form";
+import { Textarea } from "@/components/ui/textarea";
 
 type FormQuestionInputProps = {
-  question: QuestionItem;
-  onChange: (question: Partial<QuestionItem>) => void;
+  question: FormElement;
+  onChange: (question: Partial<FormElement>) => void;
 };
 
 const inputs = ({
   question,
   onChange,
-}: FormQuestionInputProps): Record<QuestionType, JSX.Element> => ({
-  text: (
+}: FormQuestionInputProps): Record<FormElementType, JSX.Element> => ({
+  "short-text": (
     <Input
       type="text"
+      placeholder="Question"
+      name="question"
+      value={question?.text}
+      onChange={(e) => {
+        onChange({
+          ...question,
+          text: e.target.value,
+        });
+      }}
+    />
+  ),
+  "large-text": (
+    <Textarea
       placeholder="Question"
       name="question"
       value={question?.text}
@@ -32,6 +45,6 @@ const inputs = ({
 });
 
 const FormQuestionInput = (props: FormQuestionInputProps) => {
-  return inputs(props)[props.question.questionType];
+  return inputs(props)[props.question.elementType];
 };
 export { FormQuestionInput };

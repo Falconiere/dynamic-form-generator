@@ -1,4 +1,4 @@
-import { DynamicFormFields } from "../containers/DynamicFormFields";
+import { FormBuilder } from "../containers/FormBuilder";
 
-const CreateForm = () => <DynamicFormFields />;
+const CreateForm = () => <FormBuilder />;
 export { CreateForm };

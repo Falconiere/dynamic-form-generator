@@ -1,9 +1,9 @@
 import { Update } from "@/server/database/forms/update";
-import { DynamicForm } from "@/server/types/DynamicForm";
+import { Form } from "@/server/types/Form";
 import { FormResponse } from "@/server/types/FormResponse";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-const useDynamicForm = () => {
+const useFormBuilder = () => {
   const supabase = createClientComponentClient();
   const getCurrentUser = async () => {
     const {data}  = await supabase.auth.getUser();
@@ -13,9 +13,9 @@ const useDynamicForm = () => {
     return data.user
   }
 
-  const create = async (form: DynamicForm) => {
+  const create = async (form: Form) => {
     const user = await getCurrentUser();
-    const { error, data } = await supabase.from("forms").insert<DynamicForm>({
+    const { error, data } = await supabase.from("forms").insert<Form>({
       ...form,
       user_id: user?.id,
     });
@@ -28,7 +28,7 @@ const useDynamicForm = () => {
   const update = async ({id, payload}:Update):Promise<FormResponse> => {
     const user = await getCurrentUser();
     console.log({id, payload})
-    const { error, data } = await supabase.from("forms").update<DynamicForm>({
+    const { error, data } = await supabase.from("forms").update<Form>({
       ...payload,
       user_id: user?.id,
     }).eq("id", id);
@@ -39,7 +39,7 @@ const useDynamicForm = () => {
     return data;
   }
 
-  const handleOnSubmit = async (payload?: DynamicForm) => {
+  const handleOnSubmit = async (payload?: Form) => {
    
     if(!payload)return
     if (payload?.id) {
@@ -54,4 +54,4 @@ const useDynamicForm = () => {
   return { handleOnSubmit }
 }
 
-export { useDynamicForm }
+export { useFormBuilder }

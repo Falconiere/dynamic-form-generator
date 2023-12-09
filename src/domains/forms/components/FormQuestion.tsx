@@ -3,12 +3,12 @@ import { Input } from "@/components/ui/input";
 import { FormQuestionType } from "./FormQuestionType";
 import { FormQuestionInput } from "./FormQuestionInput";
 
-import { PlusCircle, Trash } from "lucide-react";
-import { QuestionItem } from "@/server/types/DynamicForm";
+import { Trash } from "lucide-react";
+import { FormElement } from "@/server/types/Form";
 
 type FormQuestionProps = {
-  question: QuestionItem;
-  onChange: (question: Partial<QuestionItem>) => void;
+  question: FormElement;
+  onChange: (question: Partial<FormElement>) => void;
   onDelete: () => void;
   canDelete?: boolean;
 };
@@ -19,7 +19,7 @@ const FormQuestion = ({
   onDelete,
   canDelete,
 }: FormQuestionProps) => {
-  const { questionType } = question;
+  const { elementType } = question;
   return (
     <Card className="relative">
       <CardHeader className="flex flex-col gap-2">
@@ -41,11 +41,11 @@ const FormQuestion = ({
       <CardContent className="flex gap-4 items-start justify-between">
         <FormQuestionInput question={question} onChange={onChange} />
         <FormQuestionType
-          value={questionType}
+          value={elementType}
           onChange={(value) =>
             onChange({
               ...question,
-              questionType: value,
+              elementType: value,
             })
           }
         />

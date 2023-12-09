@@ -8,11 +8,11 @@ import { Label } from "@/components/ui/label";
 import { Edit, Trash } from "lucide-react";
 import { convertStringToSlug, isLabelValid } from "../utils";
 import { FormAddOptionButton } from "./FormAddOptionButton";
-import { Option, QuestionItem } from "@/server/types/DynamicForm";
+import { Option, FormElement } from "@/server/types/Form";
 
 type FormCheckBoxesProps = {
-  question?: Partial<QuestionItem>;
-  onChange?: (question: Partial<QuestionItem>) => void;
+  question?: Partial<FormElement>;
+  onChange?: (question: Partial<FormElement>) => void;
 };
 
 function FormCheckBoxes({ question, onChange }: FormCheckBoxesProps) {

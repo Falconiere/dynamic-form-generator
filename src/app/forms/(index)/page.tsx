@@ -1,9 +1,9 @@
 import { ListForms } from "@/domains/forms/screens/ListForms";
 import { fetchAll } from "@/server/database/forms";
-import { DynamicForm } from "@/server/types/DynamicForm";
+import { Form } from "@/server/types/Form";
 
 const Page = async () => {
-  let data: DynamicForm[] = [];
+  let data: Form[] = [];
   try {
     const response = await fetchAll();
     if (Array.isArray(response)) data = response;

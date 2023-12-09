@@ -1,16 +1,10 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardTitle } from "@/components/ui/card";
 import { Divider } from "@/components/ui/divider";
-import { DynamicForm } from "@/server/types/DynamicForm";
+import { Form } from "@/server/types/Form";
 import Link from "next/link";
 
 type ListFormsProps = {
-  forms?: DynamicForm[];
+  forms?: Form[];
 };
 
 const ListForms = ({ forms }: ListFormsProps) => {
@@ -28,7 +22,7 @@ const ListForms = ({ forms }: ListFormsProps) => {
       <Divider />
       <div className="grid grid-cols-4 gap-4 grid-rows-[minmax(100px, auto)]">
         {Array.isArray(forms)
-          ? forms?.map((form: DynamicForm) => (
+          ? forms?.map((form: Form) => (
               <Link
                 href={`/forms/edit/${form.id}`}
                 key={form.id}

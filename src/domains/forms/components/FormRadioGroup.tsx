@@ -7,11 +7,11 @@ import { Edit, Trash } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { convertStringToSlug, isLabelValid } from "../utils";
 import { FormAddOptionButton } from "./FormAddOptionButton";
-import { Option, QuestionItem } from "@/server/types/DynamicForm";
+import { Option, FormElement } from "@/server/types/Form";
 
 type FormRadioGroupProps = {
-  question?: Partial<QuestionItem>;
-  onChange?: (question: Partial<QuestionItem>) => void;
+  question?: Partial<FormElement>;
+  onChange?: (question: Partial<FormElement>) => void;
 };
 function FormRadioGroup({ question, onChange }: FormRadioGroupProps) {
   const inputAddRef = useRef<HTMLInputElement>(null);

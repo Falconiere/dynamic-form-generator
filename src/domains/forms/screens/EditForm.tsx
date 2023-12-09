@@ -1,11 +1,11 @@
-import { DynamicForm } from "@/server/types/DynamicForm";
-import { DynamicFormFields } from "../containers/DynamicFormFields";
+import { Form } from "@/server/types/Form";
+import { FormBuilder } from "../containers/FormBuilder";
 
 type EditFormProps = {
-  form: DynamicForm;
+  form: Form;
 };
 const EditForm = ({ form }: EditFormProps) => {
-  return <DynamicFormFields form={form} />;
+  return <FormBuilder form={form} />;
 };
 
 export { EditForm };

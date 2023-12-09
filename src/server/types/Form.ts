@@ -1,4 +1,4 @@
-type QuestionType = "text" | "multiple-choice" | "checkboxes";
+type FormElementType = "short-text" | "large-text" | "multiple-choice" | "checkboxes";
 
 type Option = {
   id: string;
@@ -8,20 +8,20 @@ type Option = {
 
 type MultipleOption = Option[];
 
-type QuestionItem = {
+type FormElement = {
   id: string;
-  questionType: QuestionType;
+  elementType: FormElementType;
   question: string;
   text?: string;
   options?: MultipleOption;
 };
 
-type DynamicForm = {
+type Form = {
   id?: string;
   title: string;
   description: string;
-  questions: QuestionItem[];
+  questions: FormElement[];
   user_id?: string;
 }
 
-export type { DynamicForm, QuestionItem, Option, MultipleOption, QuestionType }
+export type { Form, FormElement, Option, MultipleOption, FormElementType }

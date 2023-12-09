@@ -1,6 +1,6 @@
 import { EditForm } from "@/domains/forms/screens/EditForm";
 import { fetchById } from "@/server/database/forms";
-import { DynamicForm } from "@/server/types/DynamicForm";
+import { Form } from "@/server/types/Form";
 import { redirect } from "next/navigation";
 
 type PageProps = {
@@ -10,7 +10,7 @@ type PageProps = {
 const Page = async ({ params }: PageProps) => {
   const { id } = params;
   try {
-    const form = await fetchById<DynamicForm>(id);
+    const form = await fetchById<Form>(id);
     if (!form) return redirect("/not-found");
     return <EditForm form={form} />;
   } catch (error) {

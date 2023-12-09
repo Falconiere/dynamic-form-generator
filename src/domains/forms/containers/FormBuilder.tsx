@@ -4,23 +4,24 @@ import { useMemo, useState } from "react";
 import { FormQuestion } from "../components/FormQuestion";
 import { Button } from "@/components/ui/button";
 import { v4 as uuidv4 } from "uuid";
-import { DynamicForm, QuestionItem } from "@/server/types/DynamicForm";
-import { useDynamicForm } from "../hooks/useDynamicForm";
+import { Form, FormElement } from "@/server/types/Form";
+import { useFormBuilder } from "../hooks/useFormBuilder";
+import { FormDraggableArea } from "../components/FormDraggableArea";
 
-type DynamicFormProps = {
-  form?: DynamicForm;
+type FormBuilderProps = {
+  form?: Form;
 };
 
-const DynamicFormFields = ({ form }: DynamicFormProps) => {
-  const { handleOnSubmit } = useDynamicForm();
-  const [{ title, description, questions }, setForm] = useState<DynamicForm>(
+const FormBuilder = ({ form }: FormBuilderProps) => {
+  const { handleOnSubmit } = useFormBuilder();
+  const [{ title, description, questions }, setForm] = useState<Form>(
     form ?? {
       title: "",
       description: "",
       questions: [
         {
           id: uuidv4(),
-          questionType: "text",
+          elementType: "short-text",
           question: "",
         },
       ],
@@ -36,19 +37,10 @@ const DynamicFormFields = ({ form }: DynamicFormProps) => {
     [form, title, description, questions]
   );
 
-  const handleAddQuestion = () => {
-    const question: QuestionItem = {
-      id: uuidv4(),
-      questionType: "text",
-      question: "",
-    };
-    setForm((prev) => ({ ...prev, questions: [...prev.questions, question] }));
-  };
-
-  const handleQuestionChange = (question: Partial<QuestionItem>) => {
+  const handleQuestionChange = (question: Partial<FormElement>) => {
     const index = questions.findIndex((q) => q.id === question.id);
     const newQuestions = [...questions];
-    newQuestions[index] = question as QuestionItem;
+    newQuestions[index] = question as FormElement;
     setForm((prev) => ({ ...prev, questions: newQuestions }));
   };
 
@@ -71,18 +63,30 @@ const DynamicFormFields = ({ form }: DynamicFormProps) => {
           setForm((prev) => ({ ...prev, ...value }));
         }}
       />
-      {questions?.map((question) => (
-        <FormQuestion
-          key={question.id}
-          onChange={handleQuestionChange}
-          question={question}
-          onDelete={() => handleOnDelete(question.id)}
-          canDelete={questions.length > 1}
-        />
-      ))}
-      <div className="min-h-[100px] flex items-center justify-center border-primary border-dotted  border-2">
-        <h3>Draggable are</h3>
+      <div className="grid gap-4">
+        {questions?.map((question) => (
+          <FormQuestion
+            key={question.id}
+            onChange={handleQuestionChange}
+            question={question}
+            onDelete={() => handleOnDelete(question.id)}
+            canDelete={questions.length > 1}
+          />
+        ))}
       </div>
+      <FormDraggableArea
+        onDropped={(elementType) => {
+          const question: FormElement = {
+            id: uuidv4(),
+            elementType,
+            question: "",
+          };
+          setForm((prev) => ({
+            ...prev,
+            questions: [...prev.questions, question],
+          }));
+        }}
+      />
       <Button
         onClick={() => handleOnSubmit(payload)}
         type="button"
@@ -94,4 +98,4 @@ const DynamicFormFields = ({ form }: DynamicFormProps) => {
   );
 };
 
-export { DynamicFormFields };
+export { FormBuilder };
