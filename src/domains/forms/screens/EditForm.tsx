@@ -1,11 +1,16 @@
 import { Form } from "@/server/types/Form";
 import { FormBuilder } from "../containers/FormBuilder";
+import { FormLayout } from "@/layouts/FormLayout";
 
 type EditFormProps = {
-  form: Form;
+  defaultValue: Form;
 };
-const EditForm = ({ form }: EditFormProps) => {
-  return <FormBuilder form={form} />;
+const EditForm = ({ defaultValue }: EditFormProps) => {
+  return (
+    <FormLayout defaultValue={defaultValue}>
+      <FormBuilder />
+    </FormLayout>
+  );
 };
 
 export { EditForm };

@@ -10,10 +10,13 @@ type MultipleOption = Option[];
 
 type FormElement = {
   id: string;
-  elementType: FormElementType;
-  question: string;
+  element_type: FormElementType;
+  question_text: string;
   text?: string;
   options?: MultipleOption;
+  is_required: boolean;
+  form_id: string;
+  client_idx: number;
 };
 
 type Form = {
@@ -22,6 +25,19 @@ type Form = {
   description: string;
   questions: FormElement[];
   user_id?: string;
+  created_at?: string;
+  updated_at?: string;
+  status?: "published" | "draft" | "archived";
+  responses?: Array<{
+    id: string;
+    form_id: string;
+    question_id: string;
+    response: {
+      value: string | string[];
+    };
+    question: FormElement
+    created_at: string;
+  }>;
 }
 
 export type { Form, FormElement, Option, MultipleOption, FormElementType }

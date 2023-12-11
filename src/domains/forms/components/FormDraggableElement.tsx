@@ -1,5 +1,6 @@
 "use client";
 import { FormElementType } from "@/server/types/Form";
+import { GripVertical } from "lucide-react";
 import { useDrag } from "react-dnd";
 
 type FormDraggableElementProps = {
@@ -19,13 +20,13 @@ const FormDraggableElement = ({
     }),
   });
   return (
-    <div ref={drag}>
-      <div
-        className="bg-white  text-primary p-2 rounded-md draggable"
-        draggable
-      >
-        <h2>{label}</h2>
-      </div>
+    <div
+      className="bg-white  text-primary p-2 rounded-md draggable border-2 border-primary flex justify-between items-center"
+      draggable
+      ref={drag}
+    >
+      <h2>{label}</h2>
+      <GripVertical className="w-8 h-8" />
     </div>
   );
 };

@@ -1,18 +1,17 @@
 import { Layout } from "./components";
 
-type MainLayoutProps = {
+type HomeLayoutProps = {
   children: React.ReactNode;
 };
 
-const MainLayout = ({ children }: MainLayoutProps) => {
+const HomeLayout = ({ children }: HomeLayoutProps) => {
   return (
     <Layout.Wrapper>
-      <Layout.Sidebar />
+      <Layout.Header />
       <Layout.Container>
-        <Layout.Header />
         <Layout.Content>{children}</Layout.Content>
       </Layout.Container>
     </Layout.Wrapper>
   );
 };
-export { MainLayout };
+export { HomeLayout };

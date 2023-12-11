@@ -19,14 +19,16 @@ import { useState } from "react";
 import { FormElementType } from "@/server/types/Form";
 import { elements } from "@/server/utils/constants";
 
-type FormQuestionTypeProps = {
+type FormElementQuestionTypeProps = {
   value?: FormElementType;
   onChange: (value: FormElementType) => void;
 };
 
-function FormQuestionType({ value, onChange }: FormQuestionTypeProps) {
+function FormElementQuestionType({
+  value,
+  onChange,
+}: FormElementQuestionTypeProps) {
   const [open, setOpen] = useState(false);
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -72,4 +74,4 @@ function FormQuestionType({ value, onChange }: FormQuestionTypeProps) {
     </Popover>
   );
 }
-export { FormQuestionType };
+export { FormElementQuestionType };

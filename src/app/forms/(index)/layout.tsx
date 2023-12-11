@@ -1,11 +1,11 @@
-import { MainLayout } from "@/layouts/MainLayout";
+import { ListFormLayout } from "@/layouts/ListFormLayout";
 
 type LayoutProps = {
   children: React.ReactNode;
 };
 
 const Layout = ({ children }: LayoutProps) => (
-  <MainLayout>{children}</MainLayout>
+  <ListFormLayout>{children}</ListFormLayout>
 );
 
 export default Layout;

@@ -1,99 +1,78 @@
 "use client";
 import { FormHeader } from "../components/FormHeader";
-import { useMemo, useState } from "react";
-import { FormQuestion } from "../components/FormQuestion";
-import { Button } from "@/components/ui/button";
-import { v4 as uuidv4 } from "uuid";
-import { Form, FormElement } from "@/server/types/Form";
-import { useFormBuilder } from "../hooks/useFormBuilder";
 import { FormDraggableArea } from "../components/FormDraggableArea";
+import { FormBuilderQuestionList } from "./FormBuilderQuestionList";
+import { useFormBuilderContext } from "../provider/FormBuilderProvider";
+import { cn } from "@/lib/utils";
+import { FormChart } from "../components/FormChart";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
-type FormBuilderProps = {
-  form?: Form;
-};
-
-const FormBuilder = ({ form }: FormBuilderProps) => {
-  const { handleOnSubmit } = useFormBuilder();
-  const [{ title, description, questions }, setForm] = useState<Form>(
-    form ?? {
-      title: "",
-      description: "",
-      questions: [
-        {
-          id: uuidv4(),
-          elementType: "short-text",
-          question: "",
-        },
-      ],
-    }
-  );
-  const payload = useMemo(
-    () => ({
-      ...form,
-      title,
-      description,
-      questions,
-    }),
-    [form, title, description, questions]
-  );
-
-  const handleQuestionChange = (question: Partial<FormElement>) => {
-    const index = questions.findIndex((q) => q.id === question.id);
-    const newQuestions = [...questions];
-    newQuestions[index] = question as FormElement;
-    setForm((prev) => ({ ...prev, questions: newQuestions }));
-  };
-
-  const handleOnDelete = (id: string) => {
-    const index = questions.findIndex((q) => q.id === id);
-    const newQuestions = [...questions];
-    newQuestions.splice(index, 1);
-    setForm((prev) => ({ ...prev, questions: newQuestions }));
-  };
+const FormBuilder = () => {
+  const {
+    handleOnQuestionChange,
+    handleOnHeaderChange,
+    handleOnAdd,
+    handleOnSortDragEnd,
+    handleOnRemove,
+    values,
+  } = useFormBuilderContext();
+  const { title, description, questions, status, responses } = values;
+  const [activeTab, setActiveTab] = useState<"form" | "response">("form");
 
   return (
     <div className="grid gap-4">
-      <h1 className="text-4xl font-medium">{form ? "Edit" : "Create"} form</h1>
-      <FormHeader
-        value={{
-          title,
-          description,
-        }}
-        onChange={(value) => {
-          setForm((prev) => ({ ...prev, ...value }));
-        }}
-      />
-      <div className="grid gap-4">
-        {questions?.map((question) => (
-          <FormQuestion
-            key={question.id}
-            onChange={handleQuestionChange}
-            question={question}
-            onDelete={() => handleOnDelete(question.id)}
-            canDelete={questions.length > 1}
-          />
-        ))}
+      <div className="flex">
+        <span
+          className={cn("text-center text-white rounded-md p-2 ", {
+            "bg-green-500": status === "published",
+            "bg-yellow-500": status === "draft",
+            "bg-red-500": status === "archived",
+          })}
+        >
+          {status}
+        </span>
       </div>
-      <FormDraggableArea
-        onDropped={(elementType) => {
-          const question: FormElement = {
-            id: uuidv4(),
-            elementType,
-            question: "",
-          };
-          setForm((prev) => ({
-            ...prev,
-            questions: [...prev.questions, question],
-          }));
-        }}
-      />
-      <Button
-        onClick={() => handleOnSubmit(payload)}
-        type="button"
-        variant="secondary"
-      >
-        Save
-      </Button>
+      <div className="tabs grid grid-cols-3 text-center justify-between  gap-2">
+        <Button
+          className="tab tab-active bg-white p-4 rounded-md cursor-pointer"
+          variant="ghost"
+          onClick={() => setActiveTab("form")}
+        >
+          Form
+        </Button>
+        <Button
+          className="tab bg-white p-4 rounded-md cursor-pointer"
+          variant="ghost"
+          onClick={() => setActiveTab("response")}
+        >
+          Responses
+        </Button>
+        <Button className="tab bg-white p-4 rounded-md" variant="ghost">
+          Settings
+        </Button>
+      </div>
+      {activeTab === "response" && <FormChart responses={responses} />}
+      {activeTab === "form" && (
+        <>
+          <FormHeader
+            value={{
+              title,
+              description,
+            }}
+            onChange={handleOnHeaderChange}
+          />
+          <FormBuilderQuestionList
+            questions={questions}
+            onChange={handleOnQuestionChange}
+            onDelete={handleOnRemove}
+            onDragEnd={handleOnSortDragEnd}
+          />
+          <FormDraggableArea
+            onDropped={(element_type) => handleOnAdd({ element_type })}
+          />
+        </>
+      )}
     </div>
   );
 };

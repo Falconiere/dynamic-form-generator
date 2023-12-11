@@ -1,2 +1,30 @@
-const Header = () => <header className="text-white " />;
+import Link from "next/link";
+
+import { AccountMenu } from "./AccountMenu";
+
+import React from "react";
+
+type HeaderProps = {
+  action?: React.ReactNode;
+};
+const Header = ({ action }: HeaderProps) => {
+  return (
+    <header className="bg-white p-2 grid items-center">
+      <div className="w-full max-w-7xl mx-auto grid px-8  items-center">
+        <div className="flex gap-4 items-center w-full">
+          <AccountMenu />
+          <nav className="flex gap-4 items-center">
+            <Link
+              href="/forms"
+              className="text-black font-semibold hover:text-gray-700"
+            >
+              My Forms
+            </Link>
+          </nav>
+          {action}
+        </div>
+      </div>
+    </header>
+  );
+};
 export { Header };

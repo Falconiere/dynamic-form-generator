@@ -1,10 +1,13 @@
+import { cn } from "@/lib/utils";
+
 type ContentProps = {
   children: React.ReactNode;
+  className?: string;
 };
 
-const Content = ({ children }: ContentProps) => (
+const Content = ({ children, className }: ContentProps) => (
   <div className="w-full overflow-y-auto">
-    <div className="p-8 w-full max-w-4xl mx-auto">{children}</div>
+    <div className={cn("w-full max-w-7xl mx-auto", className)}>{children}</div>
   </div>
 );
 export { Content };

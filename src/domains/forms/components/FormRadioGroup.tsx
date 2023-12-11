@@ -10,8 +10,8 @@ import { FormAddOptionButton } from "./FormAddOptionButton";
 import { Option, FormElement } from "@/server/types/Form";
 
 type FormRadioGroupProps = {
-  question?: Partial<FormElement>;
-  onChange?: (question: Partial<FormElement>) => void;
+  question: FormElement;
+  onChange: (question: FormElement) => void;
 };
 function FormRadioGroup({ question, onChange }: FormRadioGroupProps) {
   const inputAddRef = useRef<HTMLInputElement>(null);
@@ -29,7 +29,7 @@ function FormRadioGroup({ question, onChange }: FormRadioGroupProps) {
         id: convertStringToSlug(currentLabel),
         label: currentLabel,
       };
-      onChange?.({
+      onChange({
         ...question,
         options: [...options, option],
       });

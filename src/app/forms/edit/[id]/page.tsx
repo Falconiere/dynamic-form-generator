@@ -1,5 +1,6 @@
 import { EditForm } from "@/domains/forms/screens/EditForm";
 import { fetchById } from "@/server/database/forms";
+import { getResponses } from "@/server/database/forms/getResponses";
 import { Form } from "@/server/types/Form";
 import { redirect } from "next/navigation";
 
@@ -9,10 +10,10 @@ type PageProps = {
 };
 const Page = async ({ params }: PageProps) => {
   const { id } = params;
+  const [form] = await Promise.all([fetchById<Form>(id)]);
   try {
-    const form = await fetchById<Form>(id);
     if (!form) return redirect("/not-found");
-    return <EditForm form={form} />;
+    return <EditForm defaultValue={form} />;
   } catch (error) {
     return redirect("/not-found");
   }

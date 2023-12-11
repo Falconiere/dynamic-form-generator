@@ -1,5 +1,6 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 type FormHeaderProps = {
   value: {
@@ -9,7 +10,9 @@ type FormHeaderProps = {
   onChange: (value: FormHeaderProps["value"]) => void;
 };
 const FormHeader = ({ value, onChange }: FormHeaderProps) => {
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     onChange({
       ...value,
       [event.target.name]: event.target.value,
@@ -28,8 +31,7 @@ const FormHeader = ({ value, onChange }: FormHeaderProps) => {
             value={value.title}
           />
         </CardTitle>
-        <Input
-          type="text"
+        <Textarea
           placeholder="Form description"
           name="description"
           onChange={handleChange}

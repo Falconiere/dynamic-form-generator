@@ -5,11 +5,15 @@ import { supabase } from "@/server/utils/supabase";
 
 type Update = {
   id:Form["id"],
-  payload:Form
+  payload:{
+    title:Form["title"],
+    description:Form["description"],
+    status:Form["status"],
+  }
 }
 const update = async ({id, payload}:Update):Promise<FormResponse> => {
   const { client, user } = await supabase()
-  const { error, data } = await client.from("forms").update<Form>({
+  const { error, data } = await client.from("forms").update<Partial<Form>>({
     ...payload,
     user_id: user?.id,
   }).eq("id", id);

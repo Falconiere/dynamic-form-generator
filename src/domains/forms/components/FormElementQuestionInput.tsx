@@ -4,21 +4,22 @@ import { FormCheckBoxes } from "./FormCheckBoxes";
 import { FormElement, FormElementType } from "@/server/types/Form";
 import { Textarea } from "@/components/ui/textarea";
 
-type FormQuestionInputProps = {
+type FormElementQuestionInputProps = {
   question: FormElement;
-  onChange: (question: Partial<FormElement>) => void;
+  onChange: (question: FormElement) => void;
 };
 
 const inputs = ({
   question,
   onChange,
-}: FormQuestionInputProps): Record<FormElementType, JSX.Element> => ({
+}: FormElementQuestionInputProps): Record<FormElementType, JSX.Element> => ({
   "short-text": (
     <Input
       type="text"
       placeholder="Question"
       name="question"
       value={question?.text}
+      readOnly
       onChange={(e) => {
         onChange({
           ...question,
@@ -31,6 +32,7 @@ const inputs = ({
     <Textarea
       placeholder="Question"
       name="question"
+      readOnly
       value={question?.text}
       onChange={(e) => {
         onChange({
@@ -44,7 +46,9 @@ const inputs = ({
   checkboxes: <FormCheckBoxes question={question} onChange={onChange} />,
 });
 
-const FormQuestionInput = (props: FormQuestionInputProps) => {
-  return inputs(props)[props.question.elementType];
+const FormElementQuestionInput = (props: FormElementQuestionInputProps) => {
+  return (
+    inputs(props)[props.question.element_type] ?? inputs(props)["short-text"]
+  );
 };
-export { FormQuestionInput };
+export { FormElementQuestionInput };

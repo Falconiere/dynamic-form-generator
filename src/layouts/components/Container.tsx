@@ -1,9 +1,10 @@
+import { cn } from "@/lib/utils";
+
 type ContainerProps = {
   children: React.ReactNode;
+  className?: string;
 };
-const Container = ({ children }: ContainerProps) => (
-  <div className="grid grid-rows-[60px,calc(100%-60px)]  overflow-hidden">
-    {children}
-  </div>
+const Container = ({ children, className }: ContainerProps) => (
+  <div className={cn("grid overflow-hidden", className)}>{children}</div>
 );
 export { Container };

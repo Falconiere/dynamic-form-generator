@@ -11,8 +11,8 @@ import { FormAddOptionButton } from "./FormAddOptionButton";
 import { Option, FormElement } from "@/server/types/Form";
 
 type FormCheckBoxesProps = {
-  question?: Partial<FormElement>;
-  onChange?: (question: Partial<FormElement>) => void;
+  question: FormElement;
+  onChange: (question: FormElement) => void;
 };
 
 function FormCheckBoxes({ question, onChange }: FormCheckBoxesProps) {
@@ -28,10 +28,10 @@ function FormCheckBoxes({ question, onChange }: FormCheckBoxesProps) {
       isLabelValid({ currentLabel, options })
     ) {
       const option = {
-        id: currentLabel,
+        id: convertStringToSlug(currentLabel),
         label: currentLabel,
       };
-      onChange?.({
+      onChange({
         ...question,
         options: [...options, option],
       });
@@ -102,6 +102,13 @@ function FormCheckBoxes({ question, onChange }: FormCheckBoxesProps) {
               defaultValue={editingOption?.label}
               ref={inputEditRef}
               onBlur={(e) => handleUpdateOption(e.target.value ?? "")}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  // update
+                  const target = e.target as HTMLInputElement;
+                  handleUpdateOption(target.value ?? "");
+                }
+              }}
             />
           ) : null}
 

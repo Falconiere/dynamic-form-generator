@@ -3,8 +3,6 @@ import { Sidebar } from "./Sidebar";
 import { Wrapper } from "./Wrapper";
 import { Container } from "./Container";
 import { Content } from "./Content";
-import { SideBarFormFields } from "./SideBarFormFiels";
-
 
 const Layout = {
   Header,
@@ -12,6 +10,5 @@ const Layout = {
   Container,
   Content,
   Sidebar,
-  SideBarFormFields
 }
 export { Layout }
