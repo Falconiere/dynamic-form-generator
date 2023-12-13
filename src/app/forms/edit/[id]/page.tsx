@@ -1,6 +1,5 @@
 import { EditForm } from "@/domains/forms/screens/EditForm";
 import { fetchById } from "@/server/database/forms";
-import { getResponses } from "@/server/database/forms/getResponses";
 import { Form } from "@/server/types/Form";
 import { redirect } from "next/navigation";
 

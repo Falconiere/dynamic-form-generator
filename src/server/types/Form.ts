@@ -28,7 +28,7 @@ type Form = {
   created_at?: string;
   updated_at?: string;
   status?: "published" | "draft" | "archived";
-  responses?: Array<{
+  answers?: Array<{
     id: string;
     form_id: string;
     question_id: string;

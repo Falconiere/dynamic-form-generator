@@ -4,9 +4,10 @@ import { FormDraggableArea } from "../components/FormDraggableArea";
 import { FormBuilderQuestionList } from "./FormBuilderQuestionList";
 import { useFormBuilderContext } from "../provider/FormBuilderProvider";
 import { cn } from "@/lib/utils";
-import { FormChart } from "../components/FormChart";
+import { FormMultipleChoiceChart } from "../components/FormMultipleChoiceChart";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { FormCheckBoxesChart } from "../components/FormCheckBoxesChart";
 
 const FormBuilder = () => {
   const {
@@ -17,8 +18,8 @@ const FormBuilder = () => {
     handleOnRemove,
     values,
   } = useFormBuilderContext();
-  const { title, description, questions, status, responses } = values;
-  const [activeTab, setActiveTab] = useState<"form" | "response">("form");
+  const { title, description, questions, status, answers } = values;
+  const [activeTab, setActiveTab] = useState<"form" | "response">("response");
 
   return (
     <div className="grid gap-4">
@@ -52,7 +53,12 @@ const FormBuilder = () => {
           Settings
         </Button>
       </div>
-      {activeTab === "response" && <FormChart responses={responses} />}
+      {activeTab === "response" && (
+        <>
+          <FormCheckBoxesChart answers={answers} />
+          <FormMultipleChoiceChart answers={answers} />
+        </>
+      )}
       {activeTab === "form" && (
         <>
           <FormHeader

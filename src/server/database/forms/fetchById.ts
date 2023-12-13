@@ -5,7 +5,7 @@ const fetchById = async <T>(id: string):Promise<T> => {
     .select(`
       *,  
       questions (*),
-      responses (*,
+      answers (*,
         question: questions (
           question_text,
           options,
