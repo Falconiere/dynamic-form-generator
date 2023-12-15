@@ -13,7 +13,7 @@ type FormElement = {
   element_type: FormElementType;
   question_text: string;
   text?: string;
-  options?: MultipleOption;
+  question_options?: MultipleOption;
   is_required: boolean;
   form_id: string;
   client_idx: number;

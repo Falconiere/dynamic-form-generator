@@ -6,12 +6,10 @@ import { Textarea } from "@/components/ui/textarea";
 
 type FormElementQuestionInputProps = {
   question: FormElement;
-  onChange: (question: FormElement) => void;
 };
 
 const inputs = ({
   question,
-  onChange,
 }: FormElementQuestionInputProps): Record<FormElementType, JSX.Element> => ({
   "short-text": (
     <Input
@@ -20,12 +18,6 @@ const inputs = ({
       name="question"
       value={question?.text}
       readOnly
-      onChange={(e) => {
-        onChange({
-          ...question,
-          text: e.target.value,
-        });
-      }}
     />
   ),
   "large-text": (
@@ -34,16 +26,10 @@ const inputs = ({
       name="question"
       readOnly
       value={question?.text}
-      onChange={(e) => {
-        onChange({
-          ...question,
-          text: e.target.value,
-        });
-      }}
     />
   ),
-  "multiple-choice": <FormRadioGroup question={question} onChange={onChange} />,
-  checkboxes: <FormCheckBoxes question={question} onChange={onChange} />,
+  "multiple-choice": <FormRadioGroup question={question} />,
+  checkboxes: <FormCheckBoxes question={question} />,
 });
 
 const FormElementQuestionInput = (props: FormElementQuestionInputProps) => {

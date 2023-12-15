@@ -28,7 +28,7 @@ const FormElementQuestion = forwardRef<
     { question, onChange, onDelete, canDelete, draggableProps, ...rest },
     ref
   ) => {
-    const { errors } = useFormBuilderContext();
+    const { errors, handleOnQuestionChange } = useFormBuilderContext();
     const { element_type } = question;
     return (
       <Card className="relative pt-8" ref={ref} {...rest}>
@@ -44,25 +44,26 @@ const FormElementQuestion = forwardRef<
                 name="question"
                 value={question.question_text}
                 onChange={(e) => {
-                  onChange({
-                    ...question,
-                    question_text: e.target.value,
+                  handleOnQuestionChange({
+                    question: {
+                      ...question,
+                      question_text: e.target.value,
+                    },
                   });
                 }}
                 error={errors?.[question.id]}
               />
-              <FormElementQuestionInput
-                question={question}
-                onChange={onChange}
-              />
+              <FormElementQuestionInput question={question} />
             </div>
             <div className="flex flex-col gap-2 border-l-[1px] h-full px-4">
               <FormElementQuestionType
                 value={element_type}
                 onChange={(value) =>
-                  onChange({
-                    ...question,
-                    element_type: value,
+                  handleOnQuestionChange({
+                    question: {
+                      ...question,
+                      element_type: value,
+                    },
                   })
                 }
               />
@@ -72,9 +73,11 @@ const FormElementQuestion = forwardRef<
                   checked={question.is_required}
                   title="Required"
                   onCheckedChange={() => {
-                    onChange({
-                      ...question,
-                      is_required: !question.is_required,
+                    handleOnQuestionChange({
+                      question: {
+                        ...question,
+                        is_required: !question.is_required,
+                      },
                     });
                   }}
                 />

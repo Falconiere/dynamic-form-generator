@@ -13,12 +13,13 @@ const FormBuilder = () => {
   const {
     handleOnQuestionChange,
     handleOnHeaderChange,
-    handleOnAdd,
+    handleOnAddQuestion,
     handleOnSortDragEnd,
     handleOnRemove,
     values,
   } = useFormBuilderContext();
   const { title, description, questions, status, answers } = values;
+  console.log({ answers });
   const [activeTab, setActiveTab] = useState<"form" | "response">("response");
 
   return (
@@ -75,7 +76,7 @@ const FormBuilder = () => {
             onDragEnd={handleOnSortDragEnd}
           />
           <FormDraggableArea
-            onDropped={(element_type) => handleOnAdd({ element_type })}
+            onDropped={(element_type) => handleOnAddQuestion({ element_type })}
           />
         </>
       )}

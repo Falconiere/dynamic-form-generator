@@ -1,77 +1,29 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 import { Edit, Trash } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { convertStringToSlug, isLabelValid } from "../utils";
 import { FormAddOptionButton } from "./FormAddOptionButton";
-import { Option, FormElement } from "@/server/types/Form";
+import { FormElement } from "@/server/types/Form";
+import { useFormElementMultipleChoice } from "../hooks/useFormElementMultipleChoice";
 
 type FormRadioGroupProps = {
   question: FormElement;
-  onChange: (question: FormElement) => void;
 };
-function FormRadioGroup({ question, onChange }: FormRadioGroupProps) {
+function FormRadioGroup({ question }: Readonly<FormRadioGroupProps>) {
   const inputAddRef = useRef<HTMLInputElement>(null);
   const inputEdiRef = useRef<HTMLInputElement>(null);
-  const options = question?.options ?? [];
-  const [editingOption, setEditingOption] = useState<Option | null>(null);
+  const {
+    editingOption,
+    handleAddOption,
+    handleRemoveOption,
+    handleEditOption,
+    handleUpdateOption,
+  } = useFormElementMultipleChoice({ question, inputAddRef });
 
-  const handleAddOption = () => {
-    const currentLabel = inputAddRef.current?.value;
-    if (
-      typeof currentLabel === "string" &&
-      isLabelValid({ currentLabel, options })
-    ) {
-      const option = {
-        id: convertStringToSlug(currentLabel),
-        label: currentLabel,
-      };
-      onChange({
-        ...question,
-        options: [...options, option],
-      });
-      inputAddRef.current!.value = "";
-    }
-  };
-
-  const handleRemoveOption = (id: string) => {
-    onChange?.({
-      ...question,
-      options: options.filter((option) => option.id !== id),
-    });
-  };
-
-  const handleEditOption = (id: string) => {
-    const option = options.find((option) => option.id === id);
-    setEditingOption(option ?? null);
-  };
-
-  const handleUpdateOption = (newLabel: string) => {
-    if (
-      typeof newLabel === "string" &&
-      isLabelValid({ currentLabel: newLabel, options })
-    ) {
-      const newId = convertStringToSlug(newLabel);
-      const newOptions = options.map((option) => {
-        if (option.id === editingOption?.id) {
-          return {
-            ...option,
-            id: newId,
-            label: newLabel,
-          };
-        }
-        return option;
-      });
-      onChange?.({
-        ...question,
-        options: newOptions,
-      });
-    }
-    setEditingOption(null);
-  };
+  const options = question?.question_options ?? [];
 
   return (
     <div className="grid gap-4 w-full">
@@ -85,6 +37,13 @@ function FormRadioGroup({ question, onChange }: FormRadioGroupProps) {
                   className={"border border-primary"}
                   ref={inputEdiRef}
                   onBlur={(e) => handleUpdateOption(e.target.id ?? "")}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      // update
+                      const target = e.target as HTMLInputElement;
+                      handleUpdateOption(target.value ?? "");
+                    }
+                  }}
                 />
               ) : null}
               <div

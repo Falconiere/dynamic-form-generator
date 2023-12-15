@@ -1,11 +1,5 @@
 import { Form } from "@/server/types/Form";
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  ChartData,
-} from "chart.js";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import { groupMultipleChoiceResponses } from "../utils";
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -31,10 +25,6 @@ const dataset = {
   ],
   borderWidth: 1,
 };
-export const defaultData: ChartData<"pie"> = {
-  labels: [],
-  datasets: [dataset],
-};
 
 type FormMultipleChoiceChartProps = {
   answers: Form["answers"];
@@ -56,14 +46,12 @@ const FormMultipleChoiceChart = ({ answers }: FormMultipleChoiceChartProps) => {
 
     const datasets = [{ ...dataset, data }];
     return (
-      <div key={key} className="bg-white p-4">
+      <div key={key} className="bg-white p-4 rounded-md shadow-md">
         <h3 className="text-xl font-bold">{questionText}</h3>
         <h4 className="text-lg font-medium">{totalOfResponses} Responses</h4>
-        <div className="w-[300px]">
+        <div className="max-h-[400px] flex items-center justify-center">
           <Pie
-            data={{ ...defaultData, labels, datasets }}
-            width={100}
-            height={100}
+            data={{ labels, datasets }}
             options={{
               plugins: {
                 legend: {

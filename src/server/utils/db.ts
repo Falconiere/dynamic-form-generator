@@ -27,7 +27,7 @@ const dbSaveResponse = async ({ form_id, answers }: Payload):Promise<void> => {
   const db = await dbClient()
    await Promise.all(
     answers.map(({ question_id, response }) => 
-     db.query("INSERT INTO responses (form_id, question_id, response) VALUES ($1, $2, $3)", [form_id, question_id, response])
+     db.query("INSERT INTO answers (form_id, question_id, response) VALUES ($1, $2, $3)", [form_id, question_id, response])
   ))
   await db.end()
 }

@@ -1,4 +1,4 @@
-import { Form, FormElement, FormElementType } from "@/server/types/Form";
+import { Form, FormElement, FormElementType, Option } from "@/server/types/Form";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -12,6 +12,11 @@ type UseFormBuilder = {
   defaultValue: Form;
 }
 
+type HandleOnQuestionChangeParams = {
+  question: FormElement;
+  option?: Option;
+  action?: "add" | "delete" | "update";
+}
 const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
   const timeout = useRef<NodeJS.Timeout | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,7 +34,7 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
         errors[question.id] = "Question is required";
       }
       if (question.element_type === "multiple-choice" || question.element_type === "checkboxes") {
-        if (!question.options?.length) {
+        if (!question.question_options?.length) {
           errors[question.id] = "At least one option is required";
         }
       }
@@ -39,21 +44,47 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
 
 
 
-  const handleOnQuestionChange = async (question: FormElement) => {
+  const handleOnQuestionChange = async ({ question, action, option }:HandleOnQuestionChangeParams) => {
     const { questions } = values;
     const index = questions.findIndex((q) => q.id === question.id);
     const newQuestions = [...questions];
-    newQuestions[index] = question as FormElement;
+    newQuestions[index] = question;
+
     setValues((prev) => ({ ...prev, questions: newQuestions }));
     if(timeout.current) {
       clearTimeout(timeout.current)
+    }
+
+    if(question.element_type === "multiple-choice" || question.element_type === "checkboxes") {
+      if(option) {
+          if(action === "add") {
+            const previusOptionId = option.id;
+            const questionUpdate = await questionsDB.createQuestionOption<Option>({
+            label:option.label,
+            question_id: question.id
+          })
+          newQuestions[index] = {
+            ...question,
+            question_options: question.question_options?.map((q) => q.id === previusOptionId ? questionUpdate : q)
+          }
+          setValues((prev) => ({ ...prev, questions: newQuestions }));
+        }
+      
+      if(action === "delete" ) {
+        await questionsDB.removeQuestionOption(option.id)
+      }
+      if(action === "update" ) {
+        await questionsDB.updateQuestionOption(option)
+      }
+
+    }
     }
     timeout.current = setTimeout(async () => {
       await questionsDB.update(question)
     }, 1000)
   };
 
-  const handleOnAdd = async ({ element_type }:{ element_type: FormElementType }) => {
+  const handleOnAddQuestion = async ({ element_type }:{ element_type: FormElementType }) => {
       const {id } = values;
       if(!id) return
       const question: FormElement = {
@@ -150,7 +181,7 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
       handleOnSubmit, 
       handleOnQuestionChange, 
       handleOnHeaderChange, 
-      handleOnAdd, 
+      handleOnAddQuestion, 
       handleOnSortDragEnd, 
       handleOnRemove, 
       isSubmitting, 
@@ -159,4 +190,6 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
     }
 }
 
+
+export type { HandleOnQuestionChangeParams }
 export { useFormBuilder,  }

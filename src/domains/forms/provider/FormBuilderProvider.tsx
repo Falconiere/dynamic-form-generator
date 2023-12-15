@@ -14,7 +14,7 @@ const FormBuilderContext = createContext<FormBuilderContextType>({
   handleOnSubmit: () => Promise.resolve(),
   handleOnQuestionChange: () => Promise.resolve(),
   handleOnHeaderChange: () => {},
-  handleOnAdd: () => Promise.resolve(),
+  handleOnAddQuestion: () => Promise.resolve(),
   handleOnSortDragEnd: () => {},
   handleOnRemove: () => Promise.resolve(),
 });

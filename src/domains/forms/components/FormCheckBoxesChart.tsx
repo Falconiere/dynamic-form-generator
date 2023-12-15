@@ -41,11 +41,9 @@ const FormCheckBoxesChart = ({ answers }: FormCheckBoxesChartProps) => {
   if (!values || Object.keys(values)?.length === 0) {
     return null;
   }
-
   return Object.keys(values).map((key) => {
     const { labels, questionText, totalOfResponses, totalByLabel } =
       values[key];
-
     const data = {
       labels,
       datasets: [
@@ -59,12 +57,11 @@ const FormCheckBoxesChart = ({ answers }: FormCheckBoxesChartProps) => {
         },
       ],
     };
-
     return (
-      <div key={key} className="bg-white p-4">
+      <div key={key} className="bg-white p-4 rounded-md shadow-md">
         <h3 className="text-xl font-bold">{questionText}</h3>
         <h4 className="text-lg font-medium">{totalOfResponses} Responses</h4>
-        <div className="w-full">
+        <div className="max-h-[400px] flex items-center justify-center">
           <Bar options={options} data={data} />
         </div>
       </div>
