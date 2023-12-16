@@ -1,3 +1,5 @@
+import { ResponsesTotal } from "./Responses";
+
 type FormElementType = "short-text" | "large-text" | "multiple-choice" | "checkboxes";
 
 type Option = {
@@ -28,16 +30,7 @@ type Form = {
   created_at?: string;
   updated_at?: string;
   status?: "published" | "draft" | "archived";
-  answers?: Array<{
-    id: string;
-    form_id: string;
-    question_id: string;
-    response: {
-      value: string | string[];
-    };
-    question: FormElement
-    created_at: string;
-  }>;
+  responseTotals?: ResponsesTotal
 }
 
 export type { Form, FormElement, Option, MultipleOption, FormElementType }

@@ -18,8 +18,7 @@ const FormBuilder = () => {
     handleOnRemove,
     values,
   } = useFormBuilderContext();
-  const { title, description, questions, status, answers } = values;
-  console.log({ answers });
+  const { title, description, questions, status, responseTotals } = values;
   const [activeTab, setActiveTab] = useState<"form" | "response">("response");
 
   return (
@@ -56,8 +55,8 @@ const FormBuilder = () => {
       </div>
       {activeTab === "response" && (
         <>
-          <FormCheckBoxesChart answers={answers} />
-          <FormMultipleChoiceChart answers={answers} />
+          <FormCheckBoxesChart responseTotals={responseTotals} />
+          <FormMultipleChoiceChart responseTotals={responseTotals} />
         </>
       )}
       {activeTab === "form" && (
@@ -71,7 +70,11 @@ const FormBuilder = () => {
           />
           <FormBuilderQuestionList
             questions={questions}
-            onChange={handleOnQuestionChange}
+            onChange={(question) =>
+              handleOnQuestionChange({
+                question: question,
+              })
+            }
             onDelete={handleOnRemove}
             onDragEnd={handleOnSortDragEnd}
           />

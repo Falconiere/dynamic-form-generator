@@ -27,43 +27,69 @@ const dataset = {
 };
 
 type FormMultipleChoiceChartProps = {
-  answers: Form["answers"];
+  responseTotals: Form["responseTotals"];
 };
 
-const FormMultipleChoiceChart = ({ answers }: FormMultipleChoiceChartProps) => {
-  const values = groupMultipleChoiceResponses(answers);
-  if (!values || Object.keys(values)?.length === 0) {
-    return null;
-  }
+const FormMultipleChoiceChart = ({
+  responseTotals,
+}: FormMultipleChoiceChartProps) => {
+  const totalByQuestion = responseTotals?.totalByQuestion ?? {};
+  const totalByQuestionOption = responseTotals?.totalByQuestionOption ?? {};
+  const questions =
+    responseTotals?.questions?.filter(
+      (q) => q.element_type === "multiple-choice"
+    ) ?? [];
+  const labels = Object.keys(totalByQuestionOption).length
+    ? Object.keys(totalByQuestionOption)
+        .filter((question_id) => {
+          const options = totalByQuestionOption[question_id];
+          return Object.keys(options).find(
+            (option_id) => options[option_id].element_type === "multiple-choice"
+          );
+        })
+        .reduce((acc, question_id) => {
+          const options = totalByQuestionOption[question_id];
+          acc[question_id] = Object.keys(options).map(
+            (option_id) => options[option_id].label
+          );
+          return acc;
+        }, {} as { [key: string]: string[] })
+    : {};
 
-  return Object.keys(values).map((key) => {
-    const { labels, questionText, totalOfResponses, totalByLabel } =
-      values[key];
-    const data = labels.map(
-      (label) =>
-        Object.values(totalByLabel).find((l) => l.label === label)?.count
-    );
-
-    const datasets = [{ ...dataset, data }];
-    return (
-      <div key={key} className="bg-white p-4 rounded-md shadow-md">
-        <h3 className="text-xl font-bold">{questionText}</h3>
-        <h4 className="text-lg font-medium">{totalOfResponses} Responses</h4>
-        <div className="max-h-[400px] flex items-center justify-center">
-          <Pie
-            data={{ labels, datasets }}
-            options={{
-              plugins: {
-                legend: {
-                  position: "right",
+  return (
+    <>
+      {questions.map((question) => (
+        <div key={question.id} className="bg-white p-4 rounded-md shadow-md">
+          <h3 className="text-xl font-bold">{question.question_text}</h3>
+          <h4 className="text-lg font-medium">
+            {totalByQuestion[question.id]} Responses
+          </h4>
+          <div className="max-h-[400px] flex items-center justify-center">
+            <Pie
+              data={{
+                labels: labels[question.id] ?? [],
+                datasets: [
+                  {
+                    ...dataset,
+                    data: Object.keys(totalByQuestionOption[question.id]).map(
+                      (k) => totalByQuestionOption[question.id][k].count
+                    ),
+                  },
+                ],
+              }}
+              options={{
+                plugins: {
+                  legend: {
+                    position: "right",
+                  },
                 },
-              },
-            }}
-          />
+              }}
+            />
+          </div>
         </div>
-      </div>
-    );
-  });
+      ))}
+    </>
+  );
 };
 
 export { FormMultipleChoiceChart };

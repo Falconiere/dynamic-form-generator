@@ -30,7 +30,7 @@ const FormElementPreview = ({
     element_type,
     is_required,
     question_text,
-    options = [],
+    question_options = [],
     id: questionId,
   } = formElement;
   return (
@@ -75,7 +75,7 @@ const FormElementPreview = ({
             })}
             onValueChange={(value) => setValue?.(questionId, value)}
           >
-            {options?.map(({ id, label }) => (
+            {question_options?.map(({ id, label }) => (
               <div
                 key={id}
                 className="grid grid-cols-[max-content,auto] items-center gap-2"
@@ -91,7 +91,7 @@ const FormElementPreview = ({
         )}
         {element_type === "checkboxes" && (
           <div className="grid gap-2">
-            {options?.map(({ id, label }) => (
+            {question_options?.map(({ id, label }) => (
               <div
                 key={id}
                 className="grid grid-cols-[max-content,auto] items-center gap-2"
