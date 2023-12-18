@@ -4,9 +4,7 @@ type Payload = {
   form_id: string
 }
 
-type Response = number
-
-type Action = (payload:Payload) => Promise<Response>
+type Action = (payload:Payload) => Promise<number>
 const countTotalOfResponsesByFormId:Action = async ({form_id}) => {
 
   const { client } = await supabase()

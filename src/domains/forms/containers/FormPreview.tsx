@@ -12,7 +12,7 @@ const FormPreview = ({ form }: FormPreviewProps) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     setValue,
     getFieldState,
   } = useForm();
@@ -69,8 +69,8 @@ const FormPreview = ({ form }: FormPreviewProps) => {
             />
           ))}
       </div>
-      <Button className="w-full" onClick={onSubmit}>
-        Submit
+      <Button className="w-full" onClick={onSubmit} disabled={isSubmitting}>
+        {!isSubmitting ? "Submit" : "Submitting..."}
       </Button>
     </div>
   );

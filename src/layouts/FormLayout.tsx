@@ -10,6 +10,7 @@ import {
   useFormBuilderContext,
 } from "@/domains/forms/provider/FormBuilderProvider";
 import { Form } from "@/server/types/Form";
+import { FormTabs } from "@/domains/forms/components/FormTabs";
 
 type FormLayoutProps = {
   children: React.ReactNode;
@@ -37,7 +38,10 @@ const FormLayout = ({ children }: FormLayoutProps) => {
         />
         <Layout.Container className="w-full max-w-7xl mx-auto grid-cols-[280px,calc(100%-280px)] p-4">
           <FormElementsList />
-          <Layout.Content className="px-4">{children}</Layout.Content>
+          <Layout.Content className="grid px-4">
+            {id ? <FormTabs formId={id} /> : null}
+            {children}
+          </Layout.Content>
         </Layout.Container>
       </Layout.Wrapper>
     </DndProvider>

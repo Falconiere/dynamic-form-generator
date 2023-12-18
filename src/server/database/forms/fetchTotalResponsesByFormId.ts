@@ -49,7 +49,7 @@ const fetchTotalResponsesByFormId = async (form_id: string):Promise<ResponsesTot
     },{ } as Record<string, { question_text: string; count: number; element_type: FormElementType}>)
   
   const countTotalByQuestion = await Promise.all(questions.map(q=>
-      countTotalOfResponsesForQuestionByFromId({form_id, question_id: q.id, element_type: q.element_type})
+      countTotalOfResponsesForQuestionByFromId({form_id, question_id: q.id})
   ))
 
   const totalByQuestion = countTotalByQuestion.reduce((acc, next) => {

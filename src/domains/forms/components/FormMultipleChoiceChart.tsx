@@ -5,7 +5,6 @@ import { groupMultipleChoiceResponses } from "../utils";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const dataset = {
-  label: "# of responses",
   data: [12, 19, 3, 5, 2, 3],
   backgroundColor: [
     "rgba(255, 99, 132, 1)",

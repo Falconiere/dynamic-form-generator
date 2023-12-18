@@ -2,6 +2,7 @@
 import { SUPABASE_POSTGRES_URL } from "@/constants/constants"
 import pg from "pg"
 import { FormElementType } from "../types/Form"
+import { isResponseEmpty } from "./isResponseEmpty"
 
 const dbClient = async ()=> {
   const client = new pg.Client(SUPABASE_POSTGRES_URL)
@@ -31,6 +32,7 @@ const dbSaveResponse = async ({ form_id, answers }: Payload):Promise<void> => {
   const response = await db.query("INSERT INTO responses (form_id) VALUES ($1) RETURNING id", [form_id])
   
   const response_id = response?.rows?.[0]?.id
+
   const multiple = answers.filter(({ element_type }) => element_type === "multiple-choice" || element_type === "checkboxes")
   const text = answers.filter(({ element_type }) => element_type === "short-text" || element_type === "large-text")
   
@@ -63,6 +65,15 @@ const dbSaveResponse = async ({ form_id, answers }: Payload):Promise<void> => {
     )
   )
 
+ 
+  await Promise.all(
+    answers?.filter(a=> !isResponseEmpty(a.response) ).map(({ question_id }) =>db.query(
+      "INSERT INTO response_by_questions (question_id, response_id, form_id  ) VALUES ($1, $2, $3)",
+        [question_id, response_id, form_id]
+      )
+    )
+  )
+  
   await db.end()
 }
 

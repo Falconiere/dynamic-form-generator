@@ -8,6 +8,7 @@ const update = async ({id, payload}:Update):Promise<FormResponse> => {
   const { error, data } = await supabase().from("forms").update<Partial<Form>>({
     title: payload.title,
     description: payload.description,
+    status: payload.status,
     user_id: user?.id,
   }).eq("id", id);
   if(error) {

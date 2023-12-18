@@ -6,6 +6,7 @@ import { OnDragEndResponder } from "react-beautiful-dnd";
 import { revalidatePath } from "next/cache";
 import * as formsDB from "@/clientDB/forms";
 import * as questionsDB from "@/clientDB/questions";
+import { sortQuestions } from "../utils/sortQuestions";
 
 
 type UseFormBuilder = {
@@ -23,7 +24,7 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
   const [shouldDisplayErrors, setShouldDisplayErrors] = useState(false);
   const [values, setValues] = useState<Form>({
     ...defaultValue,
-    questions: defaultValue.questions.sort((a, b) => a.client_idx - b.client_idx)
+    questions: sortQuestions(defaultValue?.questions),
   });
 
   const validateQuestions = useMemo(() => {
@@ -156,13 +157,12 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
       if(!payload) return
       setIsSubmitting(true);
       if (payload?.id) {
-        
         await formsDB.update({
           id: payload.id,
           payload:{
             title: payload.title,
             description: payload.description,
-            status: payload.status,
+            status: "published"
           }
         });
         setIsSubmitting(false);
