@@ -8,6 +8,24 @@ type Option = {
   isChecked?: boolean;
 };
 
+type AnswerOption = {
+  created_at: string;
+  form_id:string;
+  id:string;
+  question_id:string;
+  question_option_id:string;
+  response_id:string;
+}
+
+type AnswerText = {
+  created_at: string;
+  form_id:string;
+  id:string;
+  question_id:string;
+  response_id:string;
+  text: string;
+}
+
 type MultipleOption = Option[];
 
 type FormElement = {
@@ -19,6 +37,8 @@ type FormElement = {
   is_required: boolean;
   form_id: string;
   client_idx: number;
+  answer_options?: AnswerOption[];
+  answer_texts?: AnswerText[];
 };
 
 type Form = {

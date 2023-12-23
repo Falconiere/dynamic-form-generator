@@ -1,4 +1,4 @@
-import { ListForms } from "@/domains/forms/screens/ListForms";
+import { ListForm } from "@/domains/forms/screens/ListForm";
 import { fetchAll } from "@/server/database/forms";
 import { Form } from "@/server/types/Form";
 
@@ -9,7 +9,7 @@ const Page = async () => {
     if (Array.isArray(response)) data = response;
   } catch (error) {}
 
-  return <ListForms forms={data} />;
+  return <ListForm forms={data} />;
 };
 
 export default Page;

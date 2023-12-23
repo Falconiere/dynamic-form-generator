@@ -14,7 +14,6 @@ const Page = async ({ params }: PageProps) => {
     fetchById<Form>(id),
     fetchTotalResponsesByFormId(id),
   ]);
-  console.log({ responses });
   try {
     if (!form) return redirect("/not-found");
     return (

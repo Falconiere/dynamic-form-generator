@@ -7,8 +7,9 @@ import { dbSaveResponse } from "@/server/utils/db";
 
 type FormPreviewProps = {
   form?: Form;
+  isResponse?: boolean;
 };
-const FormPreview = ({ form }: FormPreviewProps) => {
+const FormPreview = ({ form, isResponse }: FormPreviewProps) => {
   const {
     register,
     handleSubmit,
@@ -50,7 +51,7 @@ const FormPreview = ({ form }: FormPreviewProps) => {
     });
   });
   return (
-    <div className="grid gap-4 sm:p-8 p-2 rounded-md">
+    <div className="grid gap-4 rounded-md">
       <div className="bg-white p-4">
         <h1 className="text-4xl font-medium">{form?.title}</h1>
         <p className="text-gray-600 text-lg">{form?.description}</p>
@@ -66,12 +67,15 @@ const FormPreview = ({ form }: FormPreviewProps) => {
               setValue={setValue}
               getFieldState={getFieldState}
               errors={errors}
+              isResponse={isResponse}
             />
           ))}
       </div>
-      <Button className="w-full" onClick={onSubmit} disabled={isSubmitting}>
-        {!isSubmitting ? "Submit" : "Submitting..."}
-      </Button>
+      {!isResponse ? (
+        <Button className="w-full" onClick={onSubmit} disabled={isSubmitting}>
+          {!isSubmitting ? "Submit" : "Submitting..."}
+        </Button>
+      ) : null}
     </div>
   );
 };

@@ -1,40 +1,40 @@
+"use client";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { HTMLAttributes } from "react";
 
 type FormTabsProps = {
-  formId: string;
+  links: { href: string; label: string; isActive?: boolean }[];
+  className?: string;
+  classNameLink?: HTMLAttributes<HTMLDivElement>["className"];
 };
 
 const linkStyles =
-  "tab bg-white font-semibold p-4 rounded-md cursor-pointer shadow-md hover:bg-blue-400 hover:text-white";
-const FormTabs = ({ formId }: FormTabsProps) => {
+  "tab flex flex-1 text-center items-center justify-center bg-white font-semibold p-4 rounded-md cursor-pointer shadow-md hover:bg-gray-200 hover:text-black";
+const FormTabs = ({ links, className, classNameLink }: FormTabsProps) => {
   const pathname = usePathname();
-  const isActive = (path: string) => {
+  const isUrlActive = (path: string, isActive?: boolean) => {
     return {
-      "bg-blue-400 text-white": pathname === path,
+      "bg-blue-400 text-white": isActive || pathname === path,
     };
   };
   return (
-    <div className="tabs grid grid-cols-3 text-center justify-between gap-2 sticky top-0 bg-slate-100 pb-4 ">
-      <Link
-        className={cn(linkStyles, isActive(`/forms/edit/${formId}`))}
-        href={`/forms/edit/${formId}`}
-      >
-        Form
-      </Link>
-      <Link
-        className={cn(linkStyles, isActive(`/forms/edit/${formId}/responses`))}
-        href={`/forms/edit/${formId}/responses`}
-      >
-        Responses
-      </Link>
-      <Link
-        className={cn(linkStyles, isActive(`/forms/edit/${formId}/settings`))}
-        href={`/forms/edit/${formId}/settings`}
-      >
-        Settings
-      </Link>
+    <div
+      className={cn(
+        `tabs flex text-center justify-between gap-2 sticky top-0 bg-slate-100 pb-4`,
+        className
+      )}
+    >
+      {links.map(({ href, label, isActive }) => (
+        <Link
+          key={href}
+          className={cn(linkStyles, classNameLink, isUrlActive(href, isActive))}
+          href={href}
+        >
+          {label}
+        </Link>
+      ))}
     </div>
   );
 };

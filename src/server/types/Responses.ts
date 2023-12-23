@@ -1,4 +1,4 @@
-import { FormElement, FormElementType } from "./Form"
+import { Form, FormElement, FormElementType } from "./Form"
 
 type ResponsesTotal = {
   questions: FormElement[];
@@ -7,4 +7,12 @@ type ResponsesTotal = {
   totalOfResponses: number;
   totalByQuestion: Record<string, number>;
 }
-export type { ResponsesTotal }
+
+type IndividualResponse = {
+  id: string;
+  form: Form
+  created_at: string;
+  updated_at: string;
+}
+
+export type { ResponsesTotal, IndividualResponse }

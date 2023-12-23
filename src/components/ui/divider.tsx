@@ -1,3 +1,10 @@
-const Divider = () => <div className="divider h-[2px] bg-slate-200 my-4" />;
+import { cn } from "@/lib/utils";
+
+type DividerProps = {
+  className?: string;
+};
+const Divider = ({ className }: DividerProps) => (
+  <div className={cn("divider h-[2px] bg-slate-200 my-4", className)} />
+);
 Divider.displayName = "Divider";
 export { Divider };

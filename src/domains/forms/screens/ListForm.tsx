@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
-type ListFormsProps = {
+type ListFormProps = {
   forms?: Form[];
 };
 
@@ -28,7 +28,7 @@ const Tab = ({ active, children, onClick }: any) => {
     </Button>
   );
 };
-const ListForms = ({ forms }: ListFormsProps) => {
+const ListForm = ({ forms }: ListFormProps) => {
   const router = useRouter();
   const params = useParams();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -87,4 +87,4 @@ const ListForms = ({ forms }: ListFormsProps) => {
   );
 };
 
-export { ListForms };
+export { ListForm };

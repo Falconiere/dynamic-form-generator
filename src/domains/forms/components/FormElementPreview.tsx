@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { FormElement } from "@/server/types/Form";
+import { Form, FormElement } from "@/server/types/Form";
 import {
   FieldErrors,
   FieldValues,
@@ -13,11 +13,12 @@ import {
 } from "react-hook-form";
 
 type FormElementPreviewProps = {
-  formElement: FormElement;
+  formElement: Form["questions"][number];
   register: UseFormRegister<FieldValues>;
   errors: FieldErrors<FieldValues>;
   setValue?: UseFormSetValue<FieldValues>;
   getFieldState?: UseFormGetFieldState<FieldValues>;
+  isResponse?: boolean;
 };
 
 const FormElementPreview = ({
@@ -25,6 +26,7 @@ const FormElementPreview = ({
   register,
   errors,
   setValue,
+  isResponse,
 }: FormElementPreviewProps) => {
   const {
     element_type,
@@ -33,6 +35,14 @@ const FormElementPreview = ({
     question_options = [],
     id: questionId,
   } = formElement;
+
+  const getTextResponse = () => {
+    const response = formElement?.answer_texts?.find(
+      ({ question_id }) => question_id === questionId
+    )?.text;
+
+    return response?.length ? response : "-";
+  };
   return (
     <div className="grid gap-2">
       <div className="flex items-center gap-2">
@@ -43,26 +53,43 @@ const FormElementPreview = ({
       </div>
       <div className="grid gap-2">
         {element_type === "short-text" && (
-          <Input
-            type="text"
-            {...register(questionId, {
-              required: {
-                value: is_required,
-                message: "This field is required",
-              },
-            })}
-            error={errors?.[questionId]?.message?.toString()}
-          />
+          <>
+            {!isResponse ? (
+              <Input
+                type="text"
+                {...register(questionId, {
+                  required: {
+                    value: is_required,
+                    message: "This field is required",
+                  },
+                })}
+                error={errors?.[questionId]?.message?.toString()}
+              />
+            ) : (
+              getTextResponse()
+            )}
+          </>
         )}
         {element_type === "large-text" && (
-          <Textarea
-            {...register(questionId, {
-              required: {
-                value: is_required,
-                message: "This field is required",
-              },
-            })}
-          />
+          <>
+            {!isResponse ? (
+              <Textarea
+                defaultValue={
+                  formElement?.answer_texts?.find(
+                    ({ question_id }) => question_id === questionId
+                  )?.text
+                }
+                {...register(questionId, {
+                  required: {
+                    value: is_required,
+                    message: "This field is required",
+                  },
+                })}
+              />
+            ) : (
+              getTextResponse()
+            )}
+          </>
         )}
         {element_type === "multiple-choice" && (
           <RadioGroup
@@ -80,7 +107,17 @@ const FormElementPreview = ({
                 key={id}
                 className="grid grid-cols-[max-content,auto] items-center gap-2"
               >
-                <RadioGroupItem value={id} id={id} />
+                <RadioGroupItem
+                  value={id}
+                  id={id}
+                  checked={
+                    !!formElement?.answer_options?.find(
+                      ({ question_id, question_option_id }) =>
+                        question_id === questionId && question_option_id === id
+                    )
+                  }
+                  aria-readonly={isResponse}
+                />
                 <Label htmlFor={id}>{label}</Label>
               </div>
             ))}
@@ -100,12 +137,19 @@ const FormElementPreview = ({
                   type="checkbox"
                   id={id}
                   value={id}
+                  checked={
+                    !!formElement?.answer_options?.find(
+                      ({ question_id, question_option_id }) =>
+                        question_id === questionId && question_option_id === id
+                    )
+                  }
                   {...register(`${questionId}`, {
                     required: {
                       value: is_required,
                       message: "This field is required",
                     },
                   })}
+                  readOnly={isResponse}
                 />
                 <Label htmlFor={id}>{label}</Label>
               </div>
