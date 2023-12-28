@@ -1,7 +1,7 @@
 "use client";
 import { FormElementType } from "@/server/types/Form";
 import { GripVertical } from "lucide-react";
-import { useDrag } from "react-dnd";
+import { DragSourceMonitor, useDrag } from "react-dnd";
 
 type FormDraggableElementProps = {
   label: string;
@@ -15,8 +15,9 @@ const FormDraggableElement = ({
   const [, drag] = useDrag({
     type: "DIV",
     item: { elementType },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
+    collect: (monitor: DragSourceMonitor) => ({
+      opacity: monitor.isDragging() ? 0 : 1,
+      isDragging: !!monitor.getItem(),
     }),
   });
   return (

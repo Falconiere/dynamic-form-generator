@@ -3,7 +3,6 @@ import { FormHeader } from "../components/FormHeader";
 import { FormDraggableArea } from "../components/FormDraggableArea";
 import { FormBuilderQuestionList } from "./FormBuilderQuestionList";
 import { useFormBuilderContext } from "../provider/FormBuilderProvider";
-import { cn } from "@/lib/utils";
 
 const FormBuilder = () => {
   const {
@@ -33,11 +32,9 @@ const FormBuilder = () => {
             question: question,
           })
         }
+        onSortDragEnd={handleOnSortDragEnd}
         onDelete={handleOnRemove}
-        onDragEnd={handleOnSortDragEnd}
-      />
-      <FormDraggableArea
-        onDropped={(element_type) => handleOnAddQuestion({ element_type })}
+        onAddQuestion={handleOnAddQuestion}
       />
     </div>
   );

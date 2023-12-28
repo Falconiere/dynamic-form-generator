@@ -1,6 +1,6 @@
-import { useDrop } from "react-dnd";
+import { DragSourceMonitor, useDrop } from "react-dnd";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { FormElementType } from "@/server/types/Form";
 
@@ -9,28 +9,38 @@ type FormDraggableAreaProps = {
 };
 const FormDraggableArea = ({ onDropped }: FormDraggableAreaProps) => {
   const [isHovering, setIsHovering] = useState(false);
-  const [, drop] = useDrop({
+  const [{ isOver }, drop] = useDrop({
     accept: "DIV",
     drop: (item: { elementType: FormElementType }) => {
       onDropped(item.elementType);
       setIsHovering(false);
     },
-    // hover: (item: { elementType: FormElementType }, monitor) => {
-    //   setIsHovering(true);
-    // },
+    hover: () => {
+      setIsHovering(true);
+    },
+    collect(monitor) {
+      return {
+        isOver: monitor.isOver(),
+      };
+    },
   });
+  useEffect(() => {
+    if (!isOver) {
+      setIsHovering(false);
+    }
+  }, [isOver]);
+
   return (
     <div
       ref={drop}
       className={cn(
-        "min-h-[100px] flex items-center justify-center border-primary border-dotted  border-2",
+        "min-h-[15px] flex items-center justify-center border-primary border-dotted transform transition-all duration-300",
         {
-          "border-red-600": isHovering,
+          "min-h-[80px]": isHovering,
+          "border-red-500": isHovering,
         }
       )}
-    >
-      <h3>Drag the element here</h3>
-    </div>
+    ></div>
   );
 };
 

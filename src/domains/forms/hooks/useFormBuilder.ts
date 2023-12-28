@@ -7,6 +7,8 @@ import { revalidatePath } from "next/cache";
 import * as formsDB from "@/clientDB/forms";
 import * as questionsDB from "@/clientDB/questions";
 import { sortQuestions } from "../utils/sortQuestions";
+import { arrayMove } from "@dnd-kit/sortable";
+import { DragEndEvent } from "@dnd-kit/core";
 
 
 type UseFormBuilder = {
@@ -85,7 +87,7 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
     }, 1000)
   };
 
-  const handleOnAddQuestion = async ({ element_type }:{ element_type: FormElementType }) => {
+  const handleOnAddQuestion = async ({ element_type, prevArrIdx }:{ element_type: FormElementType, prevArrIdx: number }) => {
       const {id } = values;
       if(!id) return
       const question: FormElement = {
@@ -94,11 +96,18 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
         question_text: "",
         is_required: false,
         form_id: id,
-        client_idx: values.questions.length,
+        client_idx: prevArrIdx + 1,
       };
+
+      
+
+      const left = values.questions.slice(0, prevArrIdx + 1);
+      const right = values.questions.slice(prevArrIdx + 1);
+      const newQuestions = [...left, question, ...right];
+      
       setValues((prev) => ({
         ...prev,
-        questions: [...prev.questions, question],
+        questions: newQuestions,
       }));
       await questionsDB.create(question)
   }
@@ -129,21 +138,29 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
     await questionsDB.remove(id)
   };
 
-  const handleOnSortDragEnd: OnDragEndResponder = useCallback(
-    (result) => {
-      const { questions } = values;
-      if (!result.destination) return;
-      const newQuestions = [...questions];
-      const [removed] = newQuestions.splice(result.source.index, 1);
-      newQuestions.splice(result.destination.index, 0, removed);
-      setValues((prev) => ({ ...prev, questions: newQuestions }));
-      if(timeout.current) {
-        clearTimeout(timeout.current)
-      }
-      timeout.current = setTimeout(async () => {
-        const payload = newQuestions.map(({id}, idx) => ({ id, client_idx: idx }))
-        await questionsDB.updateClientIdx(payload)
-      }, 1000)
+  const handleOnSortDragEnd = useCallback(
+    (event:DragEndEvent) => {
+      const {active, over} = event;
+    if (!!over?.id && !!active.id && active.id !== over?.id) {
+      setValues((prev) => {
+        const oldIndex = values?.questions?.findIndex((q) => q.id === active.id);
+        const newIndex = values?.questions?.findIndex((q)=> q.id === over.id);
+        const newQuestions = arrayMove(values?.questions, oldIndex, newIndex);
+
+        if(timeout.current){
+          clearTimeout(timeout.current)
+        }
+
+        timeout.current = setTimeout(async () => {
+          const clientIds =  newQuestions.map((q, idx) => ({ id: q.id, client_idx: idx }))
+          await questionsDB.updateClientIdx(clientIds)
+        }, 1000)
+        return {
+          ...prev,
+          questions: newQuestions,
+        }
+      });
+    }
     },
     [values?.questions]
   );

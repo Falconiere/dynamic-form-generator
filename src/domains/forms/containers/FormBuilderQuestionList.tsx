@@ -1,58 +1,70 @@
-import { FormElement } from "@/server/types/Form";
+import { FormElement, FormElementType } from "@/server/types/Form";
 import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  OnDragEndResponder,
-} from "react-beautiful-dnd";
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { FormElementQuestion } from "../components/FormElementQuestion";
+import { FormDraggableArea } from "../components/FormDraggableArea";
 
 type FormBuilderQuestionListProps = {
   questions: FormElement[];
   onChange: (question: FormElement) => void;
   onDelete: (id: string) => void;
-  onDragEnd: OnDragEndResponder;
+  onSortDragEnd?: (event: DragEndEvent) => void;
+  onAddQuestion: (payload: {
+    element_type: FormElementType;
+    prevArrIdx: number;
+  }) => void;
 };
 const FormBuilderQuestionList = ({
   questions,
   onChange: handleQuestionChange,
   onDelete: handleOnDelete,
-  onDragEnd: dragEnded,
+  onAddQuestion,
+  onSortDragEnd,
 }: FormBuilderQuestionListProps) => {
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
   return (
-    <DragDropContext onDragEnd={dragEnded}>
-      <Droppable droppableId="questions-list" type="task">
-        {(provided) => (
-          <div
-            className="grid gap-4"
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-          >
-            {questions?.map((question, idx) => (
-              <Draggable
-                key={question.id}
-                index={idx}
-                draggableId={question.id}
-              >
-                {(provided) => (
-                  <FormElementQuestion
-                    key={question.id}
-                    onChange={handleQuestionChange}
-                    question={question}
-                    onDelete={() => handleOnDelete(question.id)}
-                    canDelete={questions.length > 1}
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                  />
-                )}
-              </Draggable>
-            ))}
-            {provided.placeholder}
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={onSortDragEnd}
+    >
+      <SortableContext items={questions} strategy={verticalListSortingStrategy}>
+        {questions?.map((question, prevArrIdx) => (
+          <div key={question.id}>
+            <FormElementQuestion
+              onChange={handleQuestionChange}
+              question={question}
+              onDelete={() => handleOnDelete(question.id)}
+              canDelete={questions.length > 1}
+            />
+            <FormDraggableArea
+              onDropped={(element_type) =>
+                onAddQuestion({ element_type, prevArrIdx })
+              }
+            />
           </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+        ))}
+      </SortableContext>
+    </DndContext>
   );
 };
 
