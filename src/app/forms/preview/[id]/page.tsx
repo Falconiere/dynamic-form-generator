@@ -9,10 +9,8 @@ type PageProps = {
 const Page = async ({ params }: PageProps) => {
   const { id } = params;
   try {
-    console.log({ id });
     const form = await services.forms.findById(id);
     if (!form) return redirect("/not-found");
-    console.log({ form });
     return <PreviewForm form={form} />;
   } catch (error) {
     return redirect("/not-found");

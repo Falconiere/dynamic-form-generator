@@ -4,9 +4,6 @@ import { FormElementPreview } from "../components/FormElementPreview";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { convertAnswers } from "../utils/convertAnswers";
-
-import { saveFormResponse } from "@/server/database/forms/saveFormResponse";
 
 type FormPreviewProps = {
   form?: Form;
@@ -44,7 +41,7 @@ const FormPreview = ({ form, isResponse }: FormPreviewProps) => {
   });
 
   const questions = form?.questions ?? [];
-  console.log({ questions });
+
   return (
     <div className="grid gap-4 rounded-md">
       <div className="bg-white p-4">

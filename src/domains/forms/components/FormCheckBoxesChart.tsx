@@ -39,15 +39,17 @@ const FormCheckBoxesChart = ({ responseTotals }: FormCheckBoxesChartProps) => {
   const totalByQuestion = responseTotals?.totalByQuestion ?? {};
   const totalByQuestionOption = responseTotals?.totalByQuestionOption ?? {};
   const questions =
-    responseTotals?.questions?.filter((q) => q.element_type === "checkboxes") ??
-    [];
+    responseTotals?.questions?.filter(
+      (q) => q.element_type === "multiple_choice_checkbox"
+    ) ?? [];
 
   const labels = Object.keys(totalByQuestionOption).length
     ? Object.keys(totalByQuestionOption)
         .filter((question_id) => {
           const options = totalByQuestionOption[question_id];
           return Object.keys(options).find(
-            (option_id) => options[option_id].element_type === "checkboxes"
+            (option_id) =>
+              options[option_id].element_type === "multiple_choice_radio"
           );
         })
         .reduce((acc, question_id) => {
@@ -63,7 +65,7 @@ const FormCheckBoxesChart = ({ responseTotals }: FormCheckBoxesChartProps) => {
     <>
       {questions.map((question) => (
         <div key={question.id} className="bg-white p-4 rounded-md shadow-md">
-          <h3 className="text-xl font-bold">{question.question_text}</h3>
+          <h3 className="text-xl font-bold">{question.title}</h3>
           <h4 className="text-lg font-medium">
             {totalByQuestion[question.id]} Responses
           </h4>

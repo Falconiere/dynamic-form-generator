@@ -1,6 +1,5 @@
 import { services } from "@/backend";
 import { EditForm } from "@/domains/forms/screens/EditForm";
-//import { fetchTotalResponsesByFormId } from "@/server/database/forms/fetchTotalResponsesByFormId";
 import { redirect } from "next/navigation";
 
 type PageProps = {
@@ -15,14 +14,7 @@ const Page = async ({ params }: PageProps) => {
   ]);
   try {
     if (!form) return redirect("/not-found");
-    return (
-      <EditForm
-        defaultValue={{
-          ...form,
-          responseTotals: [],
-        }}
-      />
-    );
+    return <EditForm defaultValue={form} />;
   } catch (error) {
     return redirect("/not-found");
   }

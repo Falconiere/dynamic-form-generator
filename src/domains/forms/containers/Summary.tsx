@@ -16,20 +16,20 @@ const Summary = ({ responseTotals, formId }: SummaryProps) => {
   const totalByQuestion = responseTotals?.totalByQuestion ?? {};
   return (
     <div className="grid gap-4">
-      {questions.map(({ element_type, id, question_text }) => (
+      {questions.map(({ element_type, id, title }) => (
         <div className="grid gap-4" key={id}>
           {element_type && isMultipleChoiceQuestion(element_type) ? (
             <>
-              {element_type === "multiple-choice" ? (
+              {element_type === "multiple_choice_radio" ? (
                 <FormMultipleChoiceChart responseTotals={responseTotals} />
               ) : null}
-              {element_type === "checkboxes" ? (
+              {element_type === "multiple_choice_checkbox" ? (
                 <FormCheckBoxesChart responseTotals={responseTotals} />
               ) : null}
             </>
           ) : (
             <div className="bg-white p-4 rounded-md shadow-md">
-              <h3 className="text-xl font-bold">{question_text}</h3>
+              <h3 className="text-xl font-bold">{title}</h3>
               <h4 className="text-lg font-medium">
                 {totalByQuestion[id]} Responses
               </h4>

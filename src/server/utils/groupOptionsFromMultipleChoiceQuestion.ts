@@ -1,8 +1,9 @@
 import { FormElement, FormElementType, MultipleOption, Option } from "../types/Form";
+import { isMultipleChoiceQuestion } from "./isMultipleChoiceQuestion";
 
 
 type Group = Record<string, { options: Option[]; element_type:FormElementType }>
-type Flatted = Array<{ question_id: string, question_option_id: string}>
+type Flatted = Array<{ question_id: string, question_option_id?: string}>
 type Payload = { questions: FormElement[]} 
 type Response = { group: Group, flatted: Flatted}
 type Action = (payload:Payload) => Response
@@ -10,7 +11,7 @@ type Action = (payload:Payload) => Response
 const groupOptionsFromMultipleChoiceQuestion:Action = ({questions}) => {
   const group =  questions
   .filter(
-    q=>q.element_type === "multiple-choice" || q.element_type === "checkboxes"
+    q=>isMultipleChoiceQuestion(q.element_type)
   ).reduce((acc, next) => {
     if(!next?.question_options) return acc;
     acc[next.id] = {

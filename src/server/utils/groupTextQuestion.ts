@@ -5,6 +5,6 @@ type Action = (payload:Payload) => FormElement[]
 
 const groupTextQuestion:Action = ({questions}) => {
   return questions
-  .filter(q=>q.element_type === "short-text" || q.element_type === "large-text")
+  .filter(q=>q.element_type ==="short_text" || q.element_type === "long_text")
 }
 export { groupTextQuestion}

@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { FormRadioGroup } from "./FormRadioGroup";
 import { FormCheckBoxes } from "./FormCheckBoxes";
-import { FormElement, FormElementType, Question } from "@/server/types/Form";
+import { FormElementType, Question } from "@/server/types/Form";
 import { Textarea } from "@/components/ui/textarea";
 
 type FormElementQuestionInputProps = {

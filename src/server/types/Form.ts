@@ -46,7 +46,7 @@ type Question = questions & {
 
 type Form = Partial<forms> & {
   questions?: Question[]
-  responseTotals?: ResponsesTotal[]
+  responseTotals?: ResponsesTotal
 }
 
 export type { Form, Question, FormElement, Option, MultipleOption, FormElementType }
