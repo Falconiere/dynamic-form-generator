@@ -1,8 +1,8 @@
 import { useDrop } from "react-dnd";
 
 import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
-import { FormElementType } from "@/server/types/Form";
+import { cn } from "@/utils/utils";
+import { FormElementType } from "@/backend/types/Form";
 
 type FormDraggableAreaProps = {
   onDropped: (item: FormElementType) => void;

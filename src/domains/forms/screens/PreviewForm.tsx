@@ -1,4 +1,4 @@
-import { Form } from "@/server/types/Form";
+import { Form } from "@/backend/types/Form";
 import { FormPreview } from "../containers/FormPreview";
 
 type PreviewFormProps = {

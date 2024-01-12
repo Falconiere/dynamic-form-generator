@@ -21,6 +21,7 @@ class Forms {
     await services.questions.create(defaultQuestion)
     return await this.findById(form.id)
   }
+  
   async findById(id: string) {
     return await this.client.forms.findFirst({
       where: {

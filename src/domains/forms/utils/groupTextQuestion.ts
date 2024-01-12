@@ -1,4 +1,4 @@
-import { FormElement } from "../types/Form";
+import { FormElement } from "../../../backend/types/Form";
 
 type Payload = { questions: FormElement[]}
 type Action = (payload:Payload) => FormElement[]

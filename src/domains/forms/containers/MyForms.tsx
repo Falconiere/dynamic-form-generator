@@ -1,9 +1,9 @@
 "use client";
-import { Form } from "@/server/types/Form";
+import { Form } from "@/backend/types/Form";
 import { useRouter } from "next/navigation";
 
 import { FormListItem } from "../components/FormListItem";
-import * as client from "@/client";
+import { clientApi } from "@/clientApi";
 
 type MyFormsProps = {
   forms?: Form[];
@@ -13,7 +13,7 @@ const MyForms = ({ forms }: MyFormsProps) => {
   const router = useRouter();
   const handleChangeStatus = async (form: Form, status: Form["status"]) => {
     if (!form.id) return;
-    await client.forms.update(form.id, {
+    await clientApi.forms.update(form.id, {
       ...form,
       status,
     });

@@ -1,5 +1,5 @@
-import { http } from "@/lib/http";
-import { Option } from "@/server/types/Form";
+import { http } from "@/utils/http";
+import { Option } from "@/backend/types/Form";
 
 const create = async (payload:Option):Promise<Option> => http.post("/api/questions/options", payload);
 const update = async (id:string, payload:Partial<Option>):Promise<Option> => http.patch(`/api/questions/options/${id}`, payload);

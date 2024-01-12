@@ -1,5 +1,5 @@
 "use client";
-import { Form } from "@/server/types/Form";
+import { Form } from "@/backend/types/Form";
 import { FormElementPreview } from "../components/FormElementPreview";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";

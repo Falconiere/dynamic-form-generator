@@ -1,13 +1,13 @@
-import { Form, FormElementType, Option, Question } from "@/server/types/Form";
+import { Form, FormElementType, Option, Question } from "@/backend/types/Form";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { revalidatePath } from "next/cache";
 import { sortQuestions } from "../utils/sortQuestions";
 import { arrayMove } from "@dnd-kit/sortable";
 import { DragEndEvent } from "@dnd-kit/core";
-import { isMultipleChoiceQuestion } from "@/server/utils/isMultipleChoiceQuestion";
+import { isMultipleChoiceQuestion } from "@/domains/forms/utils/isMultipleChoiceQuestion";
 
-import * as client from "@/client";
+import { clientApi } from "@/clientApi";
 
 type UseFormBuilder = {
   defaultValue: Form;
@@ -64,7 +64,7 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
                   label: option.label ?? "",
                   question_id: question.id
                 }
-                const questionUpdate = await client.questionOptions.create(newOption)
+                const questionUpdate = await clientApi.questionOptions.create(newOption)
                 newQuestions[index] = {
                   ...question,
                   question_options: question?.question_options?.map((q) => q.id === previousOptionId ? questionUpdate : q)
@@ -73,10 +73,10 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
             }
           
           if(action === "delete" && option.id) {
-            await client.questionOptions.remove(option.id)
+            await clientApi.questionOptions.remove(option.id)
           }
           if(action === "update" && option.id ) {
-            await client.questionOptions.update(option.id, option)
+            await clientApi.questionOptions.update(option.id, option)
           }
       }
     }
@@ -85,7 +85,7 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
     delete questionUpdate.question_options
     
     timeout.current = setTimeout(async () => {
-      await client.questions.update(question.id, {
+      await clientApi.questions.update(question.id, {
         ...questionUpdate,
         updated_at: new Date()
       })
@@ -112,7 +112,7 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
         ...prev,
         questions: newQuestions,
       }));
-      await client.questions.create(question)
+      await clientApi.questions.create(question)
   }
 
   const handleOnHeaderChange = (header: Pick<Form, "description" | "title">) => {
@@ -130,7 +130,7 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
           status: values.status,
         }
       }
-      await client.forms.update(values.id,formUpdate)
+      await clientApi.forms.update(values.id,formUpdate)
     }, 1000)
   }
 
@@ -141,7 +141,7 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
     const newQuestions = [...questions];
     newQuestions.splice(index, 1);
     setValues((prev) => ({ ...prev, questions: newQuestions }));
-    await client.questions.remove(id)
+    await clientApi.questions.remove(id)
   };
 
   const handleOnSortDragEnd = useCallback(
@@ -163,7 +163,7 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
 
         timeout.current = setTimeout(async () => {
           const orderIds = newQuestions.map((q, idx) => ({ id: q.id, order: idx }))
-          await client.questions.updateQuestionOrders(orderIds)
+          await clientApi.questions.updateQuestionOrders(orderIds)
         }, 1000)
         return {
           ...prev,
@@ -184,11 +184,11 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
       if(!payload) return
       setIsSubmitting(true);
       if (payload?.id) {
-        await client.forms.update(payload.id, payload);
+        await clientApi.forms.update(payload.id, payload);
         setIsSubmitting(false);
         return;
       }
-      await client.forms.create(payload);
+      await clientApi.forms.create(payload);
       revalidatePath('/forms')
       setIsSubmitting(false);
     } catch (error) {

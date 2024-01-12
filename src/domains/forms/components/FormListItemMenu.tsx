@@ -4,7 +4,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { Form } from "@/server/types/Form";
+import { Form } from "@/backend/types/Form";
 
 import { MoreVertical } from "lucide-react";
 

@@ -1,5 +1,5 @@
 "use client";
-import { FormElementType } from "@/server/types/Form";
+import { FormElementType } from "@/backend/types/Form";
 import { GripVertical } from "lucide-react";
 import { DragSourceMonitor, useDrag } from "react-dnd";
 

@@ -4,9 +4,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useRef } from "react";
 
 import { Edit, Trash } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { FormAddOptionButton } from "./FormAddOptionButton";
-import { Question } from "@/server/types/Form";
+import { Question } from "@/backend/types/Form";
 import { useFormElementMultipleChoice } from "../hooks/useFormElementMultipleChoice";
 
 type FormRadioGroupProps = {

@@ -2,12 +2,12 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { useRef } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 
 import { Label } from "@/components/ui/label";
 import { Edit, Trash } from "lucide-react";
 import { FormAddOptionButton } from "./FormAddOptionButton";
-import { Question } from "@/server/types/Form";
+import { Question } from "@/backend/types/Form";
 import { useFormElementMultipleChoice } from "../hooks/useFormElementMultipleChoice";
 
 type FormCheckBoxesProps = {

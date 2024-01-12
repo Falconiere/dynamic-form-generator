@@ -11,7 +11,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 
-import { Form } from "@/server/types/Form";
+import { Form } from "@/backend/types/Form";
 
 ChartJS.register(
   CategoryScale,

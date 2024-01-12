@@ -1,8 +1,8 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
-import { Form } from "@/server/types/Form";
+import { cn } from "@/utils/utils";
+import { Form } from "@/backend/types/Form";
 
 type FormHeaderProps = {
   value: Form;

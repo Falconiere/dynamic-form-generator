@@ -1,6 +1,6 @@
 "use client";
-import { Form } from "@/server/types/Form";
-import { isMultipleChoiceQuestion } from "@/server/utils/isMultipleChoiceQuestion";
+import { Form } from "@/backend/types/Form";
+import { isMultipleChoiceQuestion } from "@/domains/forms/utils/isMultipleChoiceQuestion";
 import { FormMultipleChoiceChart } from "../components/FormMultipleChoiceChart";
 import { FormCheckBoxesChart } from "../components/FormCheckBoxesChart";
 import { FormTabs } from "../components/FormTabs";

@@ -1,9 +1,9 @@
 "use client";
 
-import { Form } from "@/server/types/Form";
+import { Form } from "@/backend/types/Form";
 import { MyForms } from "../containers/MyForms";
 import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { forms } from "@prisma/client";

@@ -1,4 +1,4 @@
-import { FormElementType, Option } from "../types/Form";
+import { FormElementType, Option } from "../../../backend/types/Form";
 
 type Payload = {
   questionOptionsGrouped:  Record<string, { options: Option[]; element_type:FormElementType }>

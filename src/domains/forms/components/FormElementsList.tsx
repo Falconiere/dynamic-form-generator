@@ -1,6 +1,6 @@
 import { Divider } from "@/components/ui/divider";
 import { FormDraggableElement } from "@/domains/forms/components/FormDraggableElement";
-import { elements } from "@/server/utils/constants";
+import { elements } from "@/domains/forms/utils/constants";
 
 const FormElementsList = () => (
   <div className="w-ful bg-white p-4 shadow-md rounded-md">

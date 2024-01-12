@@ -1,4 +1,4 @@
-import { FormElementType, Question } from "@/server/types/Form";
+import { FormElementType, Question } from "@/backend/types/Form";
 import {
   DndContext,
   DragEndEvent,

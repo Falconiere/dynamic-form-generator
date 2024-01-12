@@ -1,4 +1,4 @@
-import { Form } from "@/server/types/Form";
+import { Form } from "@/backend/types/Form";
 import { Summary } from "../containers/Summary";
 import { FormTabs } from "../components/FormTabs";
 import { formTabs } from "../contants/formTabs";
@@ -8,7 +8,7 @@ import {
 } from "../contants/formResponseTabs";
 import { FormPaginateResponses } from "../components/FormPaginateResponses";
 import { FormPreview } from "../containers/FormPreview";
-import { IndividualResponse } from "@/server/types/Responses";
+import { IndividualResponse } from "@/backend/types/Responses";
 
 type ResponsesFormProps = {
   responseTotals: Form["responseTotals"];

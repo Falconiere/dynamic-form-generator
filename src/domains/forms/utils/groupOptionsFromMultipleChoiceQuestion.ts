@@ -1,4 +1,4 @@
-import { FormElement, FormElementType, MultipleOption, Option } from "../types/Form";
+import { FormElement, FormElementType, MultipleOption, Option } from "../../../backend/types/Form";
 import { isMultipleChoiceQuestion } from "./isMultipleChoiceQuestion";
 
 

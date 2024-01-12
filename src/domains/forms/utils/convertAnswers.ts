@@ -1,5 +1,5 @@
-import {  FormElementType, Question } from "@/server/types/Form";
-import { isMultipleChoiceQuestion } from "@/server/utils/isMultipleChoiceQuestion";
+import {  FormElementType, Question } from "@/backend/types/Form";
+import { isMultipleChoiceQuestion } from "@/domains/forms/utils/isMultipleChoiceQuestion";
 
 type ConvertAnswers = {
   data: any;

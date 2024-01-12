@@ -1,4 +1,4 @@
-import { Form } from "@/server/types/Form";
+import { Form } from "@/backend/types/Form";
 import { FormBuilder } from "../containers/FormBuilder";
 import { FormLayout } from "@/layouts/FormLayout";
 

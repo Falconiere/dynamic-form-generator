@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 import { useFormBuilder } from "../hooks/useFormBuilder";
-import { Form } from "@/server/types/Form";
+import { Form } from "@/backend/types/Form";
 
 type FormBuilderContextType = ReturnType<typeof useFormBuilder>;
 const FormBuilderContext = createContext<FormBuilderContextType>({

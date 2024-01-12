@@ -1,4 +1,4 @@
-import {  Option, Question } from "@/server/types/Form";
+import {  Option, Question } from "@/backend/types/Form";
 import { useState } from "react";
 import { convertStringToSlug, isLabelValid } from "../utils";
 import { useFormBuilderContext } from "../provider/FormBuilderProvider";

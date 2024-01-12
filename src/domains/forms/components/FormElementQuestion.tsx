@@ -4,7 +4,7 @@ import { FormElementQuestionType } from "./FormElementQuestionType";
 import { FormElementQuestionInput } from "./FormElementQuestionInput";
 
 import { GripHorizontal, Trash } from "lucide-react";
-import { Question } from "@/server/types/Form";
+import { Question } from "@/backend/types/Form";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 

@@ -1,4 +1,4 @@
-import { FormElementType } from "../types/Form";
+import { FormElementType } from "../../../backend/types/Form";
 const elements = [
   {
     label: "Short text",

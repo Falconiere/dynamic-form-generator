@@ -1,6 +1,6 @@
 
-import * as client from "@/client";
-import { Form } from "@/server/types/Form";
+import { clientApi } from "@/clientApi";
+import { Form } from "@/backend/types/Form";
 
 
 const handleOnCreateDraft = async () => {
@@ -10,7 +10,7 @@ const handleOnCreateDraft = async () => {
       description: "Untitled form description",
       status: "draft",
     } 
-   return await client.forms.create(payload);
+   return await clientApi.forms.create(payload);
   } catch (error) {
     console.error(error);
   }

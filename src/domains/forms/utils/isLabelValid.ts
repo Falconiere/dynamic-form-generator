@@ -1,4 +1,4 @@
-import { Option } from "@/server/types/Form";
+import { Option } from "@/backend/types/Form";
 import { checkIfOption } from "./checkIfOption";
 
 const isLabelValid = ({

@@ -9,7 +9,7 @@ import {
   FormBuilderProvider,
   useFormBuilderContext,
 } from "@/domains/forms/provider/FormBuilderProvider";
-import { Form } from "@/server/types/Form";
+import { Form } from "@/backend/types/Form";
 import { FormTabs } from "@/domains/forms/components/FormTabs";
 import { formTabs } from "@/domains/forms/contants/formTabs";
 

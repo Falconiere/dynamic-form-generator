@@ -1,7 +1,7 @@
 "use client";
 import { Check, ChevronsUpDown } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -16,8 +16,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useState } from "react";
-import { FormElementType } from "@/server/types/Form";
-import { elements } from "@/server/utils/constants";
+import { FormElementType } from "@/backend/types/Form";
+import { elements } from "@/domains/forms/utils/constants";
 
 type FormElementQuestionTypeProps = {
   value?: FormElementType;
