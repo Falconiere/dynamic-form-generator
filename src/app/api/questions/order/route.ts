@@ -1,9 +1,9 @@
-import { services } from "@/backend";
+import { models } from "@/backend";
 
 export async function PATCH(request: Request) {
   try {
     const payload = await request.json() as { id: string, order: number }[];
-    const response = await services.questions.updateQuestionOrders(payload);
+    const response = await models.questions.updateQuestionOrders(payload);
     
     return new Response(JSON.stringify(response), {
       headers: { "Content-Type": "application/json" },

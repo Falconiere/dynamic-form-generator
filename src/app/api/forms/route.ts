@@ -1,17 +1,22 @@
-import { services } from "@/backend";
-import { getCurrentUser } from "@/backend/getCurrentUser";
+import { models } from "@/backend";
 import { forms } from "@prisma/client";
-
 
 
 export async function POST(request: Request) {
   try {
-    const user = await getCurrentUser()
-    if(!user?.id) throw new Error("User not found");
+    const profile = await models.userProfiles.get()
+    if (!profile) {
+      return new Response(JSON.stringify({
+        message: "You must be logged in to create a form"
+      }), {
+        headers: { "Content-Type": "application/json" },
+        status: 401
+      });
+    }
     const payload = await request.json() as forms;
-    const response = await services.forms.create({
+    const response = await models.forms.create({
       ...payload,
-      user_id: user?.id
+      user_profile_id: profile?.id
     });
     return new Response(JSON.stringify(response), {
       headers: { "Content-Type": "application/json" },

@@ -239,46 +239,44 @@ model sso_providers {
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
 model users {
-  instance_id                 String?          @db.Uuid
-  id                          String           @id @db.Uuid
-  aud                         String?          @db.VarChar(255)
-  role                        String?          @db.VarChar(255)
-  email                       String?          @db.VarChar(255)
-  encrypted_password          String?          @db.VarChar(255)
-  email_confirmed_at          DateTime?        @db.Timestamptz(6)
-  invited_at                  DateTime?        @db.Timestamptz(6)
-  confirmation_token          String?          @db.VarChar(255)
-  confirmation_sent_at        DateTime?        @db.Timestamptz(6)
-  recovery_token              String?          @db.VarChar(255)
-  recovery_sent_at            DateTime?        @db.Timestamptz(6)
-  email_change_token_new      String?          @db.VarChar(255)
-  email_change                String?          @db.VarChar(255)
-  email_change_sent_at        DateTime?        @db.Timestamptz(6)
-  last_sign_in_at             DateTime?        @db.Timestamptz(6)
+  instance_id                 String?         @db.Uuid
+  id                          String          @id @db.Uuid
+  aud                         String?         @db.VarChar(255)
+  role                        String?         @db.VarChar(255)
+  email                       String?         @db.VarChar(255)
+  encrypted_password          String?         @db.VarChar(255)
+  email_confirmed_at          DateTime?       @db.Timestamptz(6)
+  invited_at                  DateTime?       @db.Timestamptz(6)
+  confirmation_token          String?         @db.VarChar(255)
+  confirmation_sent_at        DateTime?       @db.Timestamptz(6)
+  recovery_token              String?         @db.VarChar(255)
+  recovery_sent_at            DateTime?       @db.Timestamptz(6)
+  email_change_token_new      String?         @db.VarChar(255)
+  email_change                String?         @db.VarChar(255)
+  email_change_sent_at        DateTime?       @db.Timestamptz(6)
+  last_sign_in_at             DateTime?       @db.Timestamptz(6)
   raw_app_meta_data           Json?
   raw_user_meta_data          Json?
   is_super_admin              Boolean?
-  created_at                  DateTime?        @db.Timestamptz(6)
-  updated_at                  DateTime?        @db.Timestamptz(6)
-  phone                       String?          @unique
-  phone_confirmed_at          DateTime?        @db.Timestamptz(6)
-  phone_change                String?          @default("")
-  phone_change_token          String?          @default("") @db.VarChar(255)
-  phone_change_sent_at        DateTime?        @db.Timestamptz(6)
-  confirmed_at                DateTime?        @default(dbgenerated("LEAST(email_confirmed_at, phone_confirmed_at)")) @db.Timestamptz(6)
-  email_change_token_current  String?          @default("") @db.VarChar(255)
-  email_change_confirm_status Int?             @default(0) @db.SmallInt
-  banned_until                DateTime?        @db.Timestamptz(6)
-  reauthentication_token      String?          @default("") @db.VarChar(255)
-  reauthentication_sent_at    DateTime?        @db.Timestamptz(6)
-  is_sso_user                 Boolean          @default(false)
-  deleted_at                  DateTime?        @db.Timestamptz(6)
+  created_at                  DateTime?       @db.Timestamptz(6)
+  updated_at                  DateTime?       @db.Timestamptz(6)
+  phone                       String?         @unique
+  phone_confirmed_at          DateTime?       @db.Timestamptz(6)
+  phone_change                String?         @default("")
+  phone_change_token          String?         @default("") @db.VarChar(255)
+  phone_change_sent_at        DateTime?       @db.Timestamptz(6)
+  confirmed_at                DateTime?       @default(dbgenerated("LEAST(email_confirmed_at, phone_confirmed_at)")) @db.Timestamptz(6)
+  email_change_token_current  String?         @default("") @db.VarChar(255)
+  email_change_confirm_status Int?            @default(0) @db.SmallInt
+  banned_until                DateTime?       @db.Timestamptz(6)
+  reauthentication_token      String?         @default("") @db.VarChar(255)
+  reauthentication_sent_at    DateTime?       @db.Timestamptz(6)
+  is_sso_user                 Boolean         @default(false)
+  deleted_at                  DateTime?       @db.Timestamptz(6)
   identities                  identities[]
   mfa_factors                 mfa_factors[]
   sessions                    sessions[]
   user_profiles               user_profiles[]
-  user_responses              user_responses[]
-  forms                       forms[]
 
   @@index([instance_id])
   @@schema("auth")
@@ -316,12 +314,13 @@ enum factor_type {
 //  === FROM HERE IS APP SCHEMA MODELS
 
 model user_profiles {
-  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id    String   @db.Uuid
-  created_at DateTime @default(now()) @db.Timestamptz(6)
-  updated_at DateTime @default(now()) @db.Timestamptz(6)
-  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  forms      forms[]
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id        String           @db.Uuid
+  created_at     DateTime         @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime         @default(now()) @db.Timestamptz(6)
+  users          users            @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  forms          forms[]
+  user_responses user_responses[]
 
   @@index([user_id])
   @@schema("public")
@@ -350,8 +349,8 @@ model forms {
   description           String?
   created_at            DateTime                @default(now()) @db.Timestamptz(6)
   updated_at            DateTime                @default(now()) @db.Timestamptz(6)
-  user_id               String                  @db.Uuid
-  user                  users                   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user_profile_id       String                  @db.Uuid
+  user_profile          user_profiles           @relation(fields: [user_profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   status                form_status             @default(draft)
   questions             questions[]
   answer_options        answer_options[]
@@ -359,9 +358,8 @@ model forms {
   answer_texts          answer_texts[]
   response_by_questions response_by_questions[]
   user_responses        user_responses[]
-  user_profiles         user_profiles?          @relation(fields: [user_profilesId], references: [id])
-  user_profilesId       String?                 @db.Uuid
 
+  @@index([user_profile_id])
   @@schema("public")
 }
 
@@ -473,18 +471,17 @@ model response_by_questions {
 }
 
 model user_responses {
-  id      String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  form_id String @db.Uuid
-  form    forms  @relation(fields: [form_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  user_id String @db.Uuid
-  user    users  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  form_id         String        @db.Uuid
+  form            forms         @relation(fields: [form_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user_profile_id String        @db.Uuid
+  user_profile    user_profiles @relation(fields: [user_profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   response_id String    @db.Uuid
   response    responses @relation(fields: [response_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([form_id])
-  @@index([user_id])
+  @@index([user_profile_id])
   @@index([response_id])
   @@schema("public")
 }

@@ -1,13 +1,14 @@
 import {  questions } from "@prisma/client"
-import { getPrismaClient } from "../prisma"
+import { Model } from "../Model"
 
-class Questions {
-  private readonly client = getPrismaClient()
+class Questions extends Model {
+  
   async create(payload: questions) {
     return await this.client.questions.create({
       data: payload,
     })
   }
+
   async update(id:string, payload: Partial<questions>) {
     return await this.client.questions.update({
       where: {
@@ -30,6 +31,7 @@ class Questions {
     })
     return await this.client.$transaction(updates)
   }
+  
   async remove(id: string) {
     return await this.client.questions.delete({
       where: {

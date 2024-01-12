@@ -1,15 +1,14 @@
 import { forms, questions } from "@prisma/client"
-import { getPrismaClient } from "../prisma"
-import { services } from ".."
+import { Model } from "../Model"
+import { models } from ".."
 
-class Forms {
-  private readonly client = getPrismaClient()
-  
+class Forms extends Model {
   async create(payload: forms) {
     const forms = this.client.forms
     const form  = await forms.create({
-      data: payload,
+      data:payload
     })
+    
     const defaultQuestion = {
       form_id: form.id,
       title: "What is your name?",
@@ -18,7 +17,7 @@ class Forms {
       required: true,
     } as questions
 
-    await services.questions.create(defaultQuestion)
+    await models.questions.create(defaultQuestion)
     return await this.findById(form.id)
   }
   
@@ -51,7 +50,6 @@ class Forms {
       },
       data: payload,
     })
-    
   }
 }
 

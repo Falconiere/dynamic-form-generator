@@ -1,4 +1,4 @@
-import { services } from "@/backend";
+import { models } from "@/backend";
 
 import { questions } from "@prisma/client";
 
@@ -7,7 +7,7 @@ export async function PATCH(request: Request,  { params }: { params: { id: strin
     const id = params.id;
     const body = await request.json() as Partial<questions>;
     
-    const questionOption = await services.questions.update(id, body);
+    const questionOption = await models.questions.update(id, body);
     return new Response(JSON.stringify(questionOption), {
       headers: { "Content-Type": "application/json" },
     });
@@ -20,7 +20,7 @@ export async function PATCH(request: Request,  { params }: { params: { id: strin
 export async function DELETE(request: Request,  { params }: { params: { id: string } }) {
   try {
     const id = params.id;
-    await services.questions.remove(id);
+    await models.questions.remove(id);
     return new Response(JSON.stringify({ 
       message:  "Question deleted successfully"
     }), {

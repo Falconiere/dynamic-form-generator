@@ -1,8 +1,7 @@
 import { question_options } from "@prisma/client"
-import { getPrismaClient } from "../prisma"
+import { Model } from "../Model"
 
-class QuestionOptions {
-  private readonly client = getPrismaClient()
+class QuestionOptions extends Model {
   async create(payload: question_options) {
     return await this.client.question_options.create({
       data: payload,
