@@ -27,7 +27,7 @@ type FormElementQuestionTypeProps = {
 function FormElementQuestionType({
   value,
   onChange,
-}: FormElementQuestionTypeProps) {
+}: Readonly<FormElementQuestionTypeProps>) {
   const [open, setOpen] = useState(false);
   return (
     <Popover open={open} onOpenChange={setOpen}>

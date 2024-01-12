@@ -2,7 +2,6 @@
 import { clientApi } from "@/clientApi";
 import { Form } from "@/backend/types/Form";
 
-
 const handleOnCreateDraft = async () => {
   try {
     const payload:Form = {

@@ -23,12 +23,8 @@ const useFormElementMultipleChoice = ({ question, inputAddRef}: UseFormElementMu
         id: convertStringToSlug(currentLabel),
         label: currentLabel,
       };
-      const questionUpdate = {
-        ...question,
-        question_options: [...options, option],
-      };
       handleOnQuestionChange({
-        question: questionUpdate,
+        question,
         option,
         action: "add",
       });
@@ -37,13 +33,9 @@ const useFormElementMultipleChoice = ({ question, inputAddRef}: UseFormElementMu
   };
 
   const handleRemoveOption = (id: string) => {
-    const option = options.find((option) => option.id !== id);
-    const questionUpdate = {
-      ...question,
-      question_options: options.filter((option) => option.id !== id),
-    };
+    const option = options.find((option) => option.id === id);
     handleOnQuestionChange({
-      question: questionUpdate,
+      question,
       option,
       action: "delete",
     });
@@ -59,24 +51,13 @@ const useFormElementMultipleChoice = ({ question, inputAddRef}: UseFormElementMu
       typeof newLabel === "string" &&
       isLabelValid({ currentLabel: newLabel, options })
     ) {
-      const newQuestion_question_options = options.map((option) => {
-        if (option.id === editingOption?.id) {
-          return {
-            ...option,
-            label: newLabel,
-          };
-        }
-        return option;
-      });
-
-      const option = newQuestion_question_options.find(
-        (o) => o.id === editingOption?.id
-      );
-      const questionUpdate = {
-        ...question,
-        question_options: newQuestion_question_options,
-      };
-      handleOnQuestionChange({ question: questionUpdate, option, action: "update" });
+      const option = options.find((option) => option.id === editingOption?.id);
+      handleOnQuestionChange({ question, action: "update",
+        option: {
+          ...option,
+          label: newLabel,
+        },
+    });
     }
     setEditingOption(null);
   };

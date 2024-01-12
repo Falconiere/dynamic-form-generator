@@ -47,11 +47,18 @@ const FormBuilderQuestionList = ({
       onDragEnd={onSortDragEnd}
     >
       <SortableContext items={questions} strategy={verticalListSortingStrategy}>
+        {questions?.length === 0 ? (
+          <FormDraggableArea
+            onDropped={(element_type) =>
+              onAddQuestion({ element_type, prevArrIdx: -1 })
+            }
+          />
+        ) : null}
         {questions?.map((question, prevArrIdx) => (
           <div key={question.id}>
             <FormDraggableArea
               onDropped={(element_type) =>
-                onAddQuestion({ element_type, prevArrIdx })
+                onAddQuestion({ element_type, prevArrIdx: prevArrIdx - 1 })
               }
             />
             <FormElementQuestion
@@ -59,6 +66,11 @@ const FormBuilderQuestionList = ({
               question={question}
               onDelete={() => handleOnDelete(question.id)}
               canDelete={questions.length > 1}
+            />
+            <FormDraggableArea
+              onDropped={(element_type) =>
+                onAddQuestion({ element_type, prevArrIdx })
+              }
             />
           </div>
         ))}

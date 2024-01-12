@@ -21,7 +21,10 @@ class QuestionOptions {
       where: {
         id,
       },
-      data: payload,
+      data: {
+        ...payload,
+        updated_at: new Date()
+      },
     })
   }
 }

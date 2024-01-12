@@ -33,8 +33,11 @@ class Forms {
             order: "asc",
           },
           include: {
-            question_options: true
-            
+            question_options: {
+              orderBy: {
+                created_at: "asc",
+              }
+            }
           },
         }
       }

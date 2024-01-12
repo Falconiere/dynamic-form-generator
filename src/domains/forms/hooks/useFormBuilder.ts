@@ -45,51 +45,76 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
   }, [values?.questions]);
 
 
+  const handleAddOption = async (question: Question, option: Option) => {
+    const newOption = {
+      label: option.label ?? "",
+      question_id: question.id
+    }
+    return await clientApi.questionOptions.create(newOption)
+  }
+
+  const handleOnUpdateOptions = async ( {action,option, question}: HandleOnQuestionChangeParams) =>{
+    const { questions } = values;
+    if(!questions || !option?.id) return
+    const index = questions?.findIndex((q) => q.id === question.id);
+    const newQuestions = [...questions];
+
+    switch(action) {
+      case "add":
+        const questionCreated = await handleAddOption(question, option)
+        newQuestions[index] = {
+          ...newQuestions[index],
+          question_options: [...question?.question_options ?? [],questionCreated]
+        }
+        setValues((prev) => ({ ...prev, questions: newQuestions }));
+        break;
+      case "delete":
+        newQuestions[index] = {
+          ...newQuestions[index],
+          question_options: newQuestions[index].question_options?.filter((q) => q.id !== option.id) ?? []
+        }
+        setValues((prev) => ({ ...prev, questions: newQuestions }));
+        await clientApi.questionOptions.remove(option.id)
+        break;
+      case "update":
+        const optionIndex = newQuestions[index].question_options?.findIndex((q) => q.id === option.id)
+        if(optionIndex === undefined) return
+        if(!newQuestions?.[index]) return
+        const options = [...newQuestions[index].question_options ?? []]
+        options[optionIndex] = option
+        newQuestions[index] = {
+          ...newQuestions[index],
+          question_options: options
+        }
+        setValues((prev) => ({ ...prev, questions: newQuestions }));
+        await clientApi.questionOptions.update(option.id, option)
+        break;
+      default:
+        break;
+    }
+    
+  }
   const handleOnQuestionChange = async ({ question, action, option }:HandleOnQuestionChangeParams) => {
     const { questions } = values;
     if(!questions) return
+
+    if(isMultipleChoiceQuestion(question.element_type) && action) {
+       await handleOnUpdateOptions({action, option, question })
+      return
+    }
+
     const index = questions?.findIndex((q) => q.id === question.id);
     const newQuestions = [...questions];
     newQuestions[index] = question;
-
     setValues((prev) => ({ ...prev, questions: newQuestions }));
-    if(timeout.current) {
-      clearTimeout(timeout.current)
-    }
-    if(isMultipleChoiceQuestion(question.element_type)) {
-          if(option) {
-              if(action === "add") {
-                const previousOptionId = option.id;
-                const newOption = {
-                  label: option.label ?? "",
-                  question_id: question.id
-                }
-                const questionUpdate = await clientApi.questionOptions.create(newOption)
-                newQuestions[index] = {
-                  ...question,
-                  question_options: question?.question_options?.map((q) => q.id === previousOptionId ? questionUpdate : q)
-                }
-                setValues((prev) => ({ ...prev, questions: newQuestions }));
-            }
-          
-          if(action === "delete" && option.id) {
-            await clientApi.questionOptions.remove(option.id)
-          }
-          if(action === "update" && option.id ) {
-            await clientApi.questionOptions.update(option.id, option)
-          }
-      }
-    }
-    
-    const questionUpdate = question
-    delete questionUpdate.question_options
-    
     timeout.current = setTimeout(async () => {
       await clientApi.questions.update(question.id, {
-        ...questionUpdate,
+        ...question,
+        question_options: undefined,
         updated_at: new Date()
       })
     }, 1000)
+   
   };
 
   const handleOnAddQuestion = async ({ element_type, prevArrIdx }:{ element_type: FormElementType, prevArrIdx: number }) => {
@@ -123,12 +148,10 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
     timeout.current = setTimeout(async () => {
       if(!values.id) return
       const formUpdate = {
-        id: values.id,
-        payload: {
-          title: header.title,
-          description: header.description,
-          status: values.status,
-        }
+        title: header.title,
+        description: header.description,
+        status: values.status,
+        updated_at: new Date()
       }
       await clientApi.forms.update(values.id,formUpdate)
     }, 1000)
@@ -140,7 +163,7 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
     const index = questions.findIndex((q) => q.id === id);
     const newQuestions = [...questions];
     newQuestions.splice(index, 1);
-    setValues((prev) => ({ ...prev, questions: newQuestions }));
+    setValues((prev) => ({ ...prev, questions: newQuestions.map((q, idx) => ({ ...q, order: idx })) }));
     await clientApi.questions.remove(id)
   };
 
@@ -184,11 +207,14 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
       if(!payload) return
       setIsSubmitting(true);
       if (payload?.id) {
-        await clientApi.forms.update(payload.id, payload);
+        await clientApi.forms.update(payload.id, {
+          ...payload,
+          questions: undefined,
+          updated_at: new Date()
+        });
         setIsSubmitting(false);
         return;
       }
-      await clientApi.forms.create(payload);
       revalidatePath('/forms')
       setIsSubmitting(false);
     } catch (error) {
