@@ -39,6 +39,16 @@ class Forms {
       }
     })
   }
+  async update(id: string, payload: Partial<forms>) {
+    const forms = this.client.forms
+    return await forms.update({
+      where: {
+        id,
+      },
+      data: payload,
+    })
+    
+  }
 }
 
 const formsService = new Forms()
