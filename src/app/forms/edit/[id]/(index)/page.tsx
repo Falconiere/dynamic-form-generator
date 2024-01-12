@@ -1,7 +1,6 @@
+import { services } from "@/backend";
 import { EditForm } from "@/domains/forms/screens/EditForm";
-import { fetchById } from "@/server/database/forms";
-import { fetchTotalResponsesByFormId } from "@/server/database/forms/fetchTotalResponsesByFormId";
-import { Form } from "@/server/types/Form";
+//import { fetchTotalResponsesByFormId } from "@/server/database/forms/fetchTotalResponsesByFormId";
 import { redirect } from "next/navigation";
 
 type PageProps = {
@@ -10,9 +9,9 @@ type PageProps = {
 };
 const Page = async ({ params }: PageProps) => {
   const { id } = params;
-  const [form, responses] = await Promise.all([
-    fetchById<Form>(id),
-    fetchTotalResponsesByFormId(id),
+  const [form] = await Promise.all([
+    services.forms.findById(id),
+    //fetchTotalResponsesByFormId(id),
   ]);
   try {
     if (!form) return redirect("/not-found");
@@ -20,7 +19,7 @@ const Page = async ({ params }: PageProps) => {
       <EditForm
         defaultValue={{
           ...form,
-          responseTotals: responses ?? {},
+          responseTotals: [],
         }}
       />
     );

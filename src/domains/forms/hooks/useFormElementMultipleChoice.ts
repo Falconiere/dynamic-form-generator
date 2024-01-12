@@ -1,10 +1,10 @@
-import { FormElement, Option } from "@/server/types/Form";
+import {  Option, Question } from "@/server/types/Form";
 import { useState } from "react";
 import { convertStringToSlug, isLabelValid } from "../utils";
 import { useFormBuilderContext } from "../provider/FormBuilderProvider";
 
 type UseFormElementMultipleChoice = {
-  question: FormElement;
+  question: Question;
   inputAddRef: React.RefObject<HTMLInputElement>;
 }
 const useFormElementMultipleChoice = ({ question, inputAddRef}: UseFormElementMultipleChoice) => {

@@ -1,6 +1,5 @@
-import { FormPreview } from "@/domains/forms/containers/FormPreview";
-import { fetchById } from "@/server/database/forms";
-import { Form } from "@/server/types/Form";
+import { services } from "@/backend";
+import { PreviewForm } from "@/domains/forms/screens/PreviewForm";
 import { redirect } from "next/navigation";
 
 type PageProps = {
@@ -10,9 +9,11 @@ type PageProps = {
 const Page = async ({ params }: PageProps) => {
   const { id } = params;
   try {
-    const form = await fetchById<Form>(id);
+    console.log({ id });
+    const form = await services.forms.findById(id);
     if (!form) return redirect("/not-found");
-    return <FormPreview form={form} />;
+    console.log({ form });
+    return <PreviewForm form={form} />;
   } catch (error) {
     return redirect("/not-found");
   }

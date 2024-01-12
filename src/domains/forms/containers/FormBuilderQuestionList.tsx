@@ -1,4 +1,4 @@
-import { FormElement, FormElementType } from "@/server/types/Form";
+import { FormElement, FormElementType, Question } from "@/server/types/Form";
 import {
   DndContext,
   DragEndEvent,
@@ -10,7 +10,6 @@ import {
 } from "@dnd-kit/core";
 import {
   SortableContext,
-  arrayMove,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
@@ -18,8 +17,8 @@ import { FormElementQuestion } from "../components/FormElementQuestion";
 import { FormDraggableArea } from "../components/FormDraggableArea";
 
 type FormBuilderQuestionListProps = {
-  questions: FormElement[];
-  onChange: (question: FormElement) => void;
+  questions: Question[];
+  onChange: (question: Question) => void;
   onDelete: (id: string) => void;
   onSortDragEnd?: (event: DragEndEvent) => void;
   onAddQuestion: (payload: {
@@ -50,16 +49,16 @@ const FormBuilderQuestionList = ({
       <SortableContext items={questions} strategy={verticalListSortingStrategy}>
         {questions?.map((question, prevArrIdx) => (
           <div key={question.id}>
+            <FormDraggableArea
+              onDropped={(element_type) =>
+                onAddQuestion({ element_type, prevArrIdx })
+              }
+            />
             <FormElementQuestion
               onChange={handleQuestionChange}
               question={question}
               onDelete={() => handleOnDelete(question.id)}
               canDelete={questions.length > 1}
-            />
-            <FormDraggableArea
-              onDropped={(element_type) =>
-                onAddQuestion({ element_type, prevArrIdx })
-              }
             />
           </div>
         ))}

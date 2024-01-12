@@ -1,7 +1,7 @@
-import { FormElement } from "@/server/types/Form"
+import { Question } from "@/server/types/Form"
 
-const sortQuestions = (questions:FormElement[] = []) => {
-  return questions.sort((a, b) => a.client_idx - b.client_idx)
+const sortQuestions = (q?:Question[]): Question[] => {
+  return Array.isArray(q) ? q.sort((a,b)=> a.order - b.order) : []
 }
 
 export { sortQuestions }

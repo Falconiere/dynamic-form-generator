@@ -2,19 +2,19 @@ import { FormElementType } from "../types/Form";
 const elements = [
   {
     label: "Short text",
-    value: "short-text",
+    value: "short_text",
   },
   {
-    label: "Large text",
-    value: "large-text",
+    label: "Long text",
+    value: "long_text",
   },
   {
     label: "Multiple choice",
-    value: "multiple-choice",
+    value: "multiple_choice_radio"
   },
   {
     label: "Checkboxes",
-    value: "checkboxes",
+    value: "multiple_choice_checkbox",
   },
 ] as Array<{ label: string; value: FormElementType }>;
 

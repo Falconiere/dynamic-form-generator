@@ -5,10 +5,7 @@ import { cn } from "@/lib/utils";
 import { Form } from "@/server/types/Form";
 
 type FormHeaderProps = {
-  value: {
-    title: string;
-    description: string;
-  };
+  value: Form;
   status: Form["status"];
   onChange: (value: FormHeaderProps["value"]) => void;
 };
@@ -49,7 +46,7 @@ const FormHeader = ({ value, status, onChange }: FormHeaderProps) => {
           placeholder="Form description"
           name="description"
           onChange={handleChange}
-          value={value.description}
+          value={value?.description ?? ""}
         />
       </CardHeader>
     </Card>

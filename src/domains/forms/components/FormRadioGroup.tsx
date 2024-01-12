@@ -6,11 +6,11 @@ import { useRef } from "react";
 import { Edit, Trash } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FormAddOptionButton } from "./FormAddOptionButton";
-import { FormElement } from "@/server/types/Form";
+import { Question } from "@/server/types/Form";
 import { useFormElementMultipleChoice } from "../hooks/useFormElementMultipleChoice";
 
 type FormRadioGroupProps = {
-  question: FormElement;
+  question: Question;
 };
 function FormRadioGroup({ question }: Readonly<FormRadioGroupProps>) {
   const inputAddRef = useRef<HTMLInputElement>(null);
@@ -51,18 +51,18 @@ function FormRadioGroup({ question }: Readonly<FormRadioGroupProps>) {
                   hidden: editingOption?.id === id,
                 })}
               >
-                <RadioGroupItem value={id} id={id} />
+                {id ? <RadioGroupItem value={id} id={id} /> : null}
                 <Label htmlFor={id}>{label}</Label>
               </div>
             </div>
             <div className="flex items-center justify-end gap-2">
               <Trash
                 className="cursor-pointer"
-                onClick={() => handleRemoveOption(id)}
+                onClick={() => (id ? handleRemoveOption(id) : null)}
               />
               <Edit
                 className="cursor-pointer"
-                onClick={() => handleEditOption(id)}
+                onClick={() => (id ? handleEditOption(id) : null)}
               />
             </div>
           </div>

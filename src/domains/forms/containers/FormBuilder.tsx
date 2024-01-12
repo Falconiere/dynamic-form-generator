@@ -1,6 +1,5 @@
 "use client";
 import { FormHeader } from "../components/FormHeader";
-import { FormDraggableArea } from "../components/FormDraggableArea";
 import { FormBuilderQuestionList } from "./FormBuilderQuestionList";
 import { useFormBuilderContext } from "../provider/FormBuilderProvider";
 
@@ -26,7 +25,7 @@ const FormBuilder = () => {
         onChange={handleOnHeaderChange}
       />
       <FormBuilderQuestionList
-        questions={questions}
+        questions={questions ?? []}
         onChange={(question) =>
           handleOnQuestionChange({
             question: question,

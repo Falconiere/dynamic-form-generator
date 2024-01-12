@@ -1,15 +1,15 @@
 "use client";
-import { Divider } from "@/components/ui/divider";
+
 import { Form } from "@/server/types/Form";
 import { MyForms } from "../containers/MyForms";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { forms } from "@prisma/client";
 
 type ListFormProps = {
-  forms?: Form[];
+  forms?: forms[];
 };
 
 const Tab = ({ active, children, onClick }: any) => {

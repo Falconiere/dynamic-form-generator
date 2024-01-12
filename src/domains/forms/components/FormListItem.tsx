@@ -2,10 +2,11 @@ import { cn } from "@/lib/utils";
 import { Form } from "@/server/types/Form";
 import { FormListItemMenu } from "./FormListItemMenu";
 import { format } from "date-fns";
+import { forms } from "@prisma/client";
 
 type FormListItemProps = {
-  form: Form;
-  onChangeStatus: (form: Form, status: Form["status"]) => void;
+  form: forms;
+  onChangeStatus: (form: forms, status: Form["status"]) => void;
   onEdit: () => void;
   onPreview: () => void;
 };

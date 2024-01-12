@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { Form, FormElement } from "@/server/types/Form";
+import { Question } from "@/server/types/Form";
 import {
   FieldErrors,
   FieldValues,
@@ -13,7 +13,7 @@ import {
 } from "react-hook-form";
 
 type FormElementPreviewProps = {
-  formElement: Form["questions"][number];
+  formElement: Question;
   register: UseFormRegister<FieldValues>;
   errors: FieldErrors<FieldValues>;
   setValue?: UseFormSetValue<FieldValues>;
@@ -30,8 +30,8 @@ const FormElementPreview = ({
 }: FormElementPreviewProps) => {
   const {
     element_type,
-    is_required,
-    question_text,
+    required,
+    title,
     question_options = [],
     id: questionId,
   } = formElement;
@@ -39,27 +39,27 @@ const FormElementPreview = ({
   const getTextResponse = () => {
     const response = formElement?.answer_texts?.find(
       ({ question_id }) => question_id === questionId
-    )?.text;
+    )?.answer;
 
     return response?.length ? response : "-";
   };
   return (
     <div className="grid gap-2">
       <div className="flex items-center gap-2">
-        <h2 className="text-lg font-medium">{question_text}</h2>
+        <h2 className="text-lg font-medium">{title}</h2>
         <span className="text-sm text-gray-500">
-          {is_required ? "(*)" : "(Optional)"}
+          {required ? "(*)" : "(Optional)"}
         </span>
       </div>
       <div className="grid gap-2">
-        {element_type === "short-text" && (
+        {element_type === "short_text" && (
           <>
             {!isResponse ? (
               <Input
                 type="text"
                 {...register(questionId, {
                   required: {
-                    value: is_required,
+                    value: required,
                     message: "This field is required",
                   },
                 })}
@@ -70,18 +70,18 @@ const FormElementPreview = ({
             )}
           </>
         )}
-        {element_type === "large-text" && (
+        {element_type === "long_text" && (
           <>
             {!isResponse ? (
               <Textarea
                 defaultValue={
                   formElement?.answer_texts?.find(
                     ({ question_id }) => question_id === questionId
-                  )?.text
+                  )?.answer
                 }
                 {...register(questionId, {
                   required: {
-                    value: is_required,
+                    value: required,
                     message: "This field is required",
                   },
                 })}
@@ -91,12 +91,12 @@ const FormElementPreview = ({
             )}
           </>
         )}
-        {element_type === "multiple-choice" && (
+        {element_type === "multiple_choice_radio" && (
           <RadioGroup
             className="grid gap-2"
             {...register(questionId, {
               required: {
-                value: is_required,
+                value: required,
                 message: "This field is required",
               },
             })}
@@ -108,7 +108,7 @@ const FormElementPreview = ({
                 className="grid grid-cols-[max-content,auto] items-center gap-2"
               >
                 <RadioGroupItem
-                  value={id}
+                  value={id as string}
                   id={id}
                   checked={
                     !!formElement?.answer_options?.find(
@@ -126,7 +126,7 @@ const FormElementPreview = ({
             </span>
           </RadioGroup>
         )}
-        {element_type === "checkboxes" && (
+        {element_type === "multiple_choice_checkbox" && (
           <div className="grid gap-2">
             {question_options?.map(({ id, label }) => (
               <div
@@ -145,7 +145,7 @@ const FormElementPreview = ({
                   }
                   {...register(`${questionId}`, {
                     required: {
-                      value: is_required,
+                      value: required,
                       message: "This field is required",
                     },
                   })}

@@ -11,6 +11,8 @@ const fetchAll = async (): Promise<FormResponse>=> {
   if(error) {
     throw error;
   }
+
+  console.log({data})
   return data;
 }
 

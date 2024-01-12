@@ -14,7 +14,6 @@ const AuthForm = ({ view }: AuthFormProps) => {
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event, session) => {
-      console.log({ session, APP_DOMAIN });
       if (session) {
         window.location.reload();
       }

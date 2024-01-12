@@ -4,13 +4,14 @@ import { useRouter } from "next/navigation";
 
 import { FormListItem } from "../components/FormListItem";
 import { update } from "@/clientDB/forms/update";
+import { forms } from "@prisma/client";
 type MyFormsProps = {
-  forms?: Form[];
+  forms?: forms[];
 };
 
 const MyForms = ({ forms }: MyFormsProps) => {
   const router = useRouter();
-  const handleChangeStatus = async (form: Form, status: Form["status"]) => {
+  const handleChangeStatus = async (form: forms, status: Form["status"]) => {
     await update({
       id: form.id,
       payload: {

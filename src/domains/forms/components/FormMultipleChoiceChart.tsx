@@ -1,7 +1,7 @@
 import { Form } from "@/server/types/Form";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import { groupMultipleChoiceResponses } from "../utils";
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const dataset = {

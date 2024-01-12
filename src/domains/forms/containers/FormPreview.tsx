@@ -1,14 +1,18 @@
 "use client";
-import { Form, FormElement, FormElementType } from "@/server/types/Form";
+import { Form } from "@/server/types/Form";
 import { FormElementPreview } from "../components/FormElementPreview";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
-import { dbSaveResponse } from "@/server/utils/db";
+import { Input } from "@/components/ui/input";
+import { convertAnswers } from "../utils/convertAnswers";
+
+import { saveFormResponse } from "@/server/database/forms/saveFormResponse";
 
 type FormPreviewProps = {
   form?: Form;
   isResponse?: boolean;
 };
+
 const FormPreview = ({ form, isResponse }: FormPreviewProps) => {
   const {
     register,
@@ -20,45 +24,57 @@ const FormPreview = ({ form, isResponse }: FormPreviewProps) => {
 
   const onSubmit = handleSubmit(async (data: any) => {
     if (!form?.id) return;
-    const { questions } = form;
 
-    const isMultipleChoice = (question: FormElement) => {
-      return (
-        question?.element_type === "checkboxes" ||
-        question?.element_type === "multiple-choice"
-      );
-    };
-
-    const answers = Object.entries(data).map(([key, value]) => {
-      const question = questions.find((question) => question.id === key);
-      if (!question) return;
-      const options = Array.isArray(value) ? value : [value];
-      const response = isMultipleChoice(question) ? options : value;
-      return {
-        question_id: key,
-        response,
-        element_type: question.element_type,
-      };
-    }) as Array<{
-      question_id: string;
-      response: string | string[];
-      element_type: FormElementType;
-    }>;
-
-    await dbSaveResponse({
-      form_id: form.id,
-      answers,
-    });
+    // const isAnswered = await isFormAnswered({
+    //   formId: form.id,
+    //   email: data.email,
+    // });
+    // if (isAnswered) {
+    //   alert("You already answered this form");
+    //   return;
+    // }
+    // const answers = convertAnswers({
+    //   questions: form.questions ?? [],
+    //   data,
+    // });
+    // await saveFormResponse({
+    //   form_id: form.id,
+    //   answers,
+    // });
   });
+
+  const questions = form?.questions ?? [];
+  console.log({ questions });
   return (
     <div className="grid gap-4 rounded-md">
+      <div className="bg-white p-4">
+        <Input
+          label="Email (*)"
+          type="email"
+          {...register("email", {
+            required: {
+              value: true,
+              message: "Email is required",
+            },
+            pattern: {
+              value: /\S+@\S+\.\S+/,
+              message: "Email is invalid",
+            },
+          })}
+          error={
+            typeof errors?.email?.message === "string"
+              ? errors?.email?.message
+              : undefined
+          }
+        />
+      </div>
       <div className="bg-white p-4">
         <h1 className="text-4xl font-medium">{form?.title}</h1>
         <p className="text-gray-600 text-lg">{form?.description}</p>
       </div>
       <div className="bg-white p-4 rounded-md grid gap-4">
-        {form?.questions
-          .sort((a, b) => a.client_idx - b.client_idx)
+        {questions
+          .sort((a, b) => a.order - b.order)
           .map((element) => (
             <FormElementPreview
               key={element.id}

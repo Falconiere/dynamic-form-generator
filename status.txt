@@ -1,0 +1,26 @@
+
+# ====== (09/01/2024) ======
+
+# Install supabase locally -- Done
+# Install prisma and connect to supabase -- Done
+# Create user_profiles and forms table using prisma - Done
+# Make the auth work with supabase - Done
+
+# ====== (10/01/2024) ======
+
+# Integrate multi-schema with prisma - Done
+# Make the auth work with supabase after the multi-schema integration - Done
+# Migrate all the tables from the old database to the new database - Done
+ # Create a form using prisma - Done
+
+# ====== (11/01/2024) ======
+# Started the Refactor to use the new database with prisma
+    # Fetch the forms using prisma
+        # Fetch list of forms - Done
+        # Edit a form
+        # Save answers to a form
+
+
+
+
+

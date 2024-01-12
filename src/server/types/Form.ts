@@ -1,12 +1,9 @@
+import { answer_options, answer_texts, form_element_type, forms, question_options, questions } from "@prisma/client";
 import { ResponsesTotal } from "./Responses";
 
-type FormElementType = "short-text" | "large-text" | "multiple-choice" | "checkboxes";
+type FormElementType = form_element_type
 
-type Option = {
-  id: string;
-  label: string;
-  isChecked?: boolean;
-};
+type Option = Partial<question_options>
 
 type AnswerOption = {
   created_at: string;
@@ -41,16 +38,15 @@ type FormElement = {
   answer_texts?: AnswerText[];
 };
 
-type Form = {
-  id?: string;
-  title: string;
-  description: string;
-  questions: FormElement[];
-  user_id?: string;
-  created_at?: string;
-  updated_at?: string;
-  status?: "published" | "draft" | "archived";
-  responseTotals?: ResponsesTotal
+type Question = questions & {
+  question_options?: Partial<question_options>[]
+  answer_texts?: Partial<answer_texts>[];
+  answer_options?: Partial<answer_options>[];
 }
 
-export type { Form, FormElement, Option, MultipleOption, FormElementType }
+type Form = Partial<forms> & {
+  questions?: Question[]
+  responseTotals?: ResponsesTotal[]
+}
+
+export type { Form, Question, FormElement, Option, MultipleOption, FormElementType }

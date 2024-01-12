@@ -1,25 +1,24 @@
-import { Form, FormElement, FormElementType, Option } from "@/server/types/Form";
+import { Form, FormElementType, Option, Question } from "@/server/types/Form";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-
-import { OnDragEndResponder } from "react-beautiful-dnd";
 import { revalidatePath } from "next/cache";
-import * as formsDB from "@/clientDB/forms";
-import * as questionsDB from "@/clientDB/questions";
 import { sortQuestions } from "../utils/sortQuestions";
 import { arrayMove } from "@dnd-kit/sortable";
 import { DragEndEvent } from "@dnd-kit/core";
+import { isMultipleChoiceQuestion } from "@/server/utils/isMultipleChoiceQuestion";
 
+import * as client from "@/client";
 
 type UseFormBuilder = {
   defaultValue: Form;
 }
 
 type HandleOnQuestionChangeParams = {
-  question: FormElement;
+  question: Question;
   option?: Option;
   action?: "add" | "delete" | "update";
 }
+
 const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
   const timeout = useRef<NodeJS.Timeout | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,11 +31,11 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
   const validateQuestions = useMemo(() => {
     const { questions } = values;
     const errors: Record<string, string> = {};
-    questions.forEach((question) => {
-      if (!question.question_text) {
+    questions?.forEach((question) => {
+      if (!question.title) {
         errors[question.id] = "Question is required";
       }
-      if (question.element_type === "multiple-choice" || question.element_type === "checkboxes") {
+      if (isMultipleChoiceQuestion(question.element_type)) {
         if (!question.question_options?.length) {
           errors[question.id] = "At least one option is required";
         }
@@ -46,10 +45,10 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
   }, [values?.questions]);
 
 
-
   const handleOnQuestionChange = async ({ question, action, option }:HandleOnQuestionChangeParams) => {
     const { questions } = values;
-    const index = questions.findIndex((q) => q.id === question.id);
+    if(!questions) return
+    const index = questions?.findIndex((q) => q.id === question.id);
     const newQuestions = [...questions];
     newQuestions[index] = question;
 
@@ -57,49 +56,53 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
     if(timeout.current) {
       clearTimeout(timeout.current)
     }
-
-    if(question.element_type === "multiple-choice" || question.element_type === "checkboxes") {
-      if(option) {
-          if(action === "add") {
-            const previusOptionId = option.id;
-            const questionUpdate = await questionsDB.createQuestionOption<Option>({
-            label:option.label,
-            question_id: question.id
-          })
-          newQuestions[index] = {
-            ...question,
-            question_options: question.question_options?.map((q) => q.id === previusOptionId ? questionUpdate : q)
+    if(isMultipleChoiceQuestion(question.element_type)) {
+          if(option) {
+              if(action === "add") {
+                const previousOptionId = option.id;
+                const newOption = {
+                  label: option.label ?? "",
+                  question_id: question.id
+                }
+                const questionUpdate = await client.questionOptions.create(newOption)
+                newQuestions[index] = {
+                  ...question,
+                  question_options: question?.question_options?.map((q) => q.id === previousOptionId ? questionUpdate : q)
+                }
+                setValues((prev) => ({ ...prev, questions: newQuestions }));
+            }
+          
+          if(action === "delete" && option.id) {
+            await client.questionOptions.remove(option.id)
           }
-          setValues((prev) => ({ ...prev, questions: newQuestions }));
-        }
-      
-      if(action === "delete" ) {
-        await questionsDB.removeQuestionOption(option.id)
+          if(action === "update" && option.id ) {
+            await client.questionOptions.update(option.id, option)
+          }
       }
-      if(action === "update" ) {
-        await questionsDB.updateQuestionOption(option)
-      }
-
     }
-    }
+    
+    const questionUpdate = question
+    delete questionUpdate.question_options
+    
     timeout.current = setTimeout(async () => {
-      await questionsDB.update(question)
+      await client.questions.update(question.id, {
+        ...questionUpdate,
+        updated_at: new Date()
+      })
     }, 1000)
   };
 
   const handleOnAddQuestion = async ({ element_type, prevArrIdx }:{ element_type: FormElementType, prevArrIdx: number }) => {
       const {id } = values;
-      if(!id) return
-      const question: FormElement = {
+      if(!id || !values.questions) return
+      const question = {
         id: uuidv4(),
         element_type,
-        question_text: "",
-        is_required: false,
-        form_id: id,
-        client_idx: prevArrIdx + 1,
-      };
-
-      
+        title: "This is a question?",
+        required: false,
+        form_id: values.id,
+        order: prevArrIdx + 1,
+      } as Question;
 
       const left = values.questions.slice(0, prevArrIdx + 1);
       const right = values.questions.slice(prevArrIdx + 1);
@@ -109,7 +112,7 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
         ...prev,
         questions: newQuestions,
       }));
-      await questionsDB.create(question)
+      await client.questions.create(question)
   }
 
   const handleOnHeaderChange = (header: Pick<Form, "description" | "title">) => {
@@ -118,42 +121,49 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
       clearTimeout(timeout.current)
     }
     timeout.current = setTimeout(async () => {
-      await formsDB.update({
+      if(!values.id) return
+      const formUpdate = {
         id: values.id,
         payload: {
           title: header.title,
           description: header.description,
           status: values.status,
         }
-      })
+      }
+      await client.forms.update(values.id,formUpdate)
     }, 1000)
   }
 
   const handleOnRemove = async (id: string) => {
     const { questions } = values;
+    if(!questions) return
     const index = questions.findIndex((q) => q.id === id);
     const newQuestions = [...questions];
     newQuestions.splice(index, 1);
     setValues((prev) => ({ ...prev, questions: newQuestions }));
-    await questionsDB.remove(id)
+    await client.questions.remove(id)
   };
 
   const handleOnSortDragEnd = useCallback(
     (event:DragEndEvent) => {
+      const { questions } = values;
+      if(!questions) return
       const {active, over} = event;
     if (!!over?.id && !!active.id && active.id !== over?.id) {
       setValues((prev) => {
-        const oldIndex = values?.questions?.findIndex((q) => q.id === active.id);
-        const newIndex = values?.questions?.findIndex((q)=> q.id === over.id);
-        const newQuestions = arrayMove(values?.questions, oldIndex, newIndex);
+        
+        const oldIndex = questions.findIndex((q) => q.id === active.id);
+        const newIndex = questions.findIndex((q)=> q.id === over.id);
+
+        const newQuestions = arrayMove(questions, oldIndex, newIndex)
 
         if(timeout.current){
           clearTimeout(timeout.current)
         }
 
         timeout.current = setTimeout(async () => {
-          const clientIds =  newQuestions.map((q, idx) => ({ id: q.id, client_idx: idx }))
-          await questionsDB.updateClientIdx(clientIds)
+          const orderIds = newQuestions.map((q, idx) => ({ id: q.id, order: idx }))
+          await client.questions.updateQuestionOrders(orderIds)
         }, 1000)
         return {
           ...prev,
@@ -174,18 +184,11 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
       if(!payload) return
       setIsSubmitting(true);
       if (payload?.id) {
-        await formsDB.update({
-          id: payload.id,
-          payload:{
-            title: payload.title,
-            description: payload.description,
-            status: "published"
-          }
-        });
+        await client.forms.update(payload.id, payload);
         setIsSubmitting(false);
         return;
       }
-      await formsDB.create(payload);  
+      await client.forms.create(payload);
       revalidatePath('/forms')
       setIsSubmitting(false);
     } catch (error) {

@@ -5,12 +5,14 @@ import { cn } from "@/lib/utils";
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
+  label?: string;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, error, ...props }, ref) => {
+  ({ className, type, error, label, ...props }, ref) => {
     return (
-      <div className="w-full">
+      <div className="grid gap-1 w-full">
+        {label ? <label className="text-lg font-medium">{label}</label> : null}
         <input
           type={type}
           className={cn(

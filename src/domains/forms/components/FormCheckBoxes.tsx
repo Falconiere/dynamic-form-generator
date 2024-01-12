@@ -7,11 +7,11 @@ import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Edit, Trash } from "lucide-react";
 import { FormAddOptionButton } from "./FormAddOptionButton";
-import { FormElement } from "@/server/types/Form";
+import { Question } from "@/server/types/Form";
 import { useFormElementMultipleChoice } from "../hooks/useFormElementMultipleChoice";
 
 type FormCheckBoxesProps = {
-  question: FormElement;
+  question: Question;
 };
 
 function FormCheckBoxes({ question }: Readonly<FormCheckBoxesProps>) {
@@ -27,7 +27,7 @@ function FormCheckBoxes({ question }: Readonly<FormCheckBoxesProps>) {
   const options = question?.question_options ?? [];
   return (
     <div className="grid gap-4 w-full">
-      {options.map(({ id, label, isChecked }) => (
+      {options.map(({ id, label }) => (
         <div key={id} className="flex items-center gap-2 min-h-[40px]">
           {editingOption?.id === id ? (
             <Input
@@ -49,17 +49,17 @@ function FormCheckBoxes({ question }: Readonly<FormCheckBoxesProps>) {
               hidden: editingOption?.id === id,
             })}
           >
-            <Checkbox id={id} defaultChecked={isChecked} />
+            <Checkbox id={id} />
             <Label htmlFor={id}>{label}</Label>
           </div>
           <div className="flex items-center justify-end gap-2">
             <Trash
               className="cursor-pointer"
-              onClick={() => handleRemoveOption(id)}
+              onClick={() => (id ? handleRemoveOption(id) : null)}
             />
             <Edit
               className="cursor-pointer"
-              onClick={() => handleEditOption(id)}
+              onClick={() => (id ? handleEditOption(id) : null)}
             />
           </div>
         </div>

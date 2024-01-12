@@ -1,12 +1,12 @@
+import { getPrismaClient } from "@/backend/prisma";
 import { ListForm } from "@/domains/forms/screens/ListForm";
-import { fetchAll } from "@/server/database/forms";
-import { Form } from "@/server/types/Form";
+import { forms } from "@prisma/client";
 
 const Page = async () => {
-  let data: Form[] = [];
+  let data: forms[] = [];
   try {
-    const response = await fetchAll();
-    if (Array.isArray(response)) data = response;
+    const client = getPrismaClient();
+    data = await client.forms.findMany();
   } catch (error) {}
 
   return <ListForm forms={data} />;

@@ -4,7 +4,7 @@ import { FormElementQuestionType } from "./FormElementQuestionType";
 import { FormElementQuestionInput } from "./FormElementQuestionInput";
 
 import { GripHorizontal, Trash } from "lucide-react";
-import { FormElement } from "@/server/types/Form";
+import { Question } from "@/server/types/Form";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
@@ -13,8 +13,8 @@ import { useFormBuilderContext } from "../provider/FormBuilderProvider";
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
 type FormElementQuestionProps = {
-  question: FormElement;
-  onChange: (question: FormElement) => void;
+  question: Question;
+  onChange: (question: Question) => void;
   onDelete: () => void;
   canDelete?: boolean;
 };
@@ -48,12 +48,12 @@ const FormElementQuestion = ({
               type="text"
               placeholder="Question"
               name="question"
-              value={question.question_text}
+              value={question.title}
               onChange={(e) => {
                 handleOnQuestionChange({
                   question: {
                     ...question,
-                    question_text: e.target.value,
+                    title: e.target.value,
                   },
                 });
               }}
@@ -76,13 +76,13 @@ const FormElementQuestion = ({
             <div className="flex items-center gap-2">
               <Switch
                 id={question.id + "required"}
-                checked={question.is_required}
+                checked={question.required}
                 title="Required"
                 onCheckedChange={() => {
                   handleOnQuestionChange({
                     question: {
                       ...question,
-                      is_required: !question.is_required,
+                      required: !question.required,
                     },
                   });
                 }}
