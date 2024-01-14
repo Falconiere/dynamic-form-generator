@@ -398,19 +398,17 @@ model question_options {
 }
 
 model answer_options {
-  id                 String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  label              String
-  description        String?
-  created_at         DateTime         @default(now()) @db.Timestamptz(6)
-  updated_at         DateTime         @default(now()) @db.Timestamptz(6)
-  question_id        String           @db.Uuid
-  question           questions        @relation(fields: [question_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  question_option_id String           @db.Uuid
-  question_option    question_options @relation(fields: [question_option_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  form_id            String           @db.Uuid
-  form               forms            @relation(fields: [form_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  response_id        String           @db.Uuid
-  response           responses        @relation(fields: [response_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id                 String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at         DateTime?         @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime?         @default(now()) @db.Timestamptz(6)
+  question_id        String            @db.Uuid
+  question           questions?        @relation(fields: [question_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  question_option_id String            @db.Uuid
+  question_option    question_options? @relation(fields: [question_option_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  form_id            String            @db.Uuid
+  form               forms?            @relation(fields: [form_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  response_id        String            @db.Uuid
+  response           responses?        @relation(fields: [response_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([question_option_id])
   @@index([question_id])
@@ -420,17 +418,15 @@ model answer_options {
 }
 
 model answer_texts {
-  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  label       String
-  description String?
-  created_at  DateTime  @default(now()) @db.Timestamptz(6)
-  updated_at  DateTime  @default(now()) @db.Timestamptz(6)
-  question_id String    @db.Uuid
-  question    questions @relation(fields: [question_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  form_id     String    @db.Uuid
-  form        forms     @relation(fields: [form_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  response_id String    @db.Uuid
-  response    responses @relation(fields: [response_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id          String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at  DateTime?  @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime?  @default(now()) @db.Timestamptz(6)
+  question_id String     @db.Uuid
+  question    questions? @relation(fields: [question_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  form_id     String     @db.Uuid
+  form        forms?     @relation(fields: [form_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  response_id String     @db.Uuid
+  response    responses? @relation(fields: [response_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   answer      String
 
   @@index([question_id])

@@ -1,4 +1,3 @@
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -26,7 +25,6 @@ const FormElementPreview = ({
   register,
   errors,
   setValue,
-  isResponse,
 }: FormElementPreviewProps) => {
   const {
     element_type,
@@ -54,41 +52,33 @@ const FormElementPreview = ({
       <div className="grid gap-2">
         {element_type === "short_text" && (
           <>
-            {!isResponse ? (
-              <Input
-                type="text"
-                {...register(questionId, {
-                  required: {
-                    value: required,
-                    message: "This field is required",
-                  },
-                })}
-                error={errors?.[questionId]?.message?.toString()}
-              />
-            ) : (
-              getTextResponse()
-            )}
+            <Input
+              type="text"
+              {...register(questionId, {
+                required: {
+                  value: required,
+                  message: "This field is required",
+                },
+              })}
+              error={errors?.[questionId]?.message?.toString()}
+            />
           </>
         )}
         {element_type === "long_text" && (
           <>
-            {!isResponse ? (
-              <Textarea
-                defaultValue={
-                  formElement?.answer_texts?.find(
-                    ({ question_id }) => question_id === questionId
-                  )?.answer
-                }
-                {...register(questionId, {
-                  required: {
-                    value: required,
-                    message: "This field is required",
-                  },
-                })}
-              />
-            ) : (
-              getTextResponse()
-            )}
+            <Textarea
+              defaultValue={
+                formElement?.answer_texts?.find(
+                  ({ question_id }) => question_id === questionId
+                )?.answer
+              }
+              {...register(questionId, {
+                required: {
+                  value: required,
+                  message: "This field is required",
+                },
+              })}
+            />
           </>
         )}
         {element_type === "multiple_choice_radio" && (
@@ -107,17 +97,7 @@ const FormElementPreview = ({
                 key={id}
                 className="grid grid-cols-[max-content,auto] items-center gap-2"
               >
-                <RadioGroupItem
-                  value={id as string}
-                  id={id}
-                  checked={
-                    !!formElement?.answer_options?.find(
-                      ({ question_id, question_option_id }) =>
-                        question_id === questionId && question_option_id === id
-                    )
-                  }
-                  aria-readonly={isResponse}
-                />
+                <RadioGroupItem value={id as string} id={id} />
                 <Label htmlFor={id}>{label}</Label>
               </div>
             ))}
@@ -133,24 +113,7 @@ const FormElementPreview = ({
                 key={id}
                 className="grid grid-cols-[max-content,auto] items-center gap-2"
               >
-                <input
-                  type="checkbox"
-                  id={id}
-                  value={id}
-                  checked={
-                    !!formElement?.answer_options?.find(
-                      ({ question_id, question_option_id }) =>
-                        question_id === questionId && question_option_id === id
-                    )
-                  }
-                  {...register(`${questionId}`, {
-                    required: {
-                      value: required,
-                      message: "This field is required",
-                    },
-                  })}
-                  readOnly={isResponse}
-                />
+                <input type="checkbox" id={id} value={id} />
                 <Label htmlFor={id}>{label}</Label>
               </div>
             ))}

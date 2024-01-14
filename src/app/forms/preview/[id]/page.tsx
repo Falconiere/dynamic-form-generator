@@ -1,4 +1,4 @@
-import { services } from "@/backend";
+import { models } from "@/backend";
 import { PreviewForm } from "@/domains/forms/screens/PreviewForm";
 import { redirect } from "next/navigation";
 
@@ -9,7 +9,7 @@ type PageProps = {
 const Page = async ({ params }: PageProps) => {
   const { id } = params;
   try {
-    const form = await services.forms.findById(id);
+    const form = await models.forms.findById(id);
     if (!form) return redirect("/not-found");
     return <PreviewForm form={form} />;
   } catch (error) {

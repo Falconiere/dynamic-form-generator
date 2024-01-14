@@ -4,6 +4,8 @@ import { FormElementPreview } from "../components/FormElementPreview";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
+import { convertAnswers } from "../utils/convertAnswers";
+import { clientApi } from "@/clientApi";
 
 type FormPreviewProps = {
   form?: Form;
@@ -22,21 +24,19 @@ const FormPreview = ({ form, isResponse }: FormPreviewProps) => {
   const onSubmit = handleSubmit(async (data: any) => {
     if (!form?.id) return;
 
+    const answers = convertAnswers({
+      questions: form.questions ?? [],
+      data,
+    });
+
+    const response = await clientApi.answers.create({
+      form_id: form.id,
+      answers,
+    });
+    console.log({ response });
     // const isAnswered = await isFormAnswered({
     //   formId: form.id,
     //   email: data.email,
-    // });
-    // if (isAnswered) {
-    //   alert("You already answered this form");
-    //   return;
-    // }
-    // const answers = convertAnswers({
-    //   questions: form.questions ?? [],
-    //   data,
-    // });
-    // await saveFormResponse({
-    //   form_id: form.id,
-    //   answers,
     // });
   });
 

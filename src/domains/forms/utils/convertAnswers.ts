@@ -10,7 +10,6 @@ const convertAnswers = ({data, questions}: ConvertAnswers) => {
     const question = questions.find((question) => question.id === key);
 
     if (!question) return;
-
     const options = Array.isArray(value) ? value : [value];
     const response = question && isMultipleChoiceQuestion(question.element_type) ? options : value;
     return {
@@ -18,7 +17,7 @@ const convertAnswers = ({data, questions}: ConvertAnswers) => {
       response,
       element_type: question.element_type,
     };
-  }) as Array<{
+  }).filter(q=>!!q) as Array<{
     question_id: string;
     response: string | string[];
     element_type: FormElementType;

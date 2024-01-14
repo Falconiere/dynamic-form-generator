@@ -51,6 +51,26 @@ class Forms extends Model {
       data: payload,
     })
   }
+
+  async fetchAll() {
+    return await this.client.forms.findMany({
+      include: {
+        questions: {
+          orderBy: {
+            order: "asc",
+          },
+          include: {
+            question_options: {
+              orderBy: {
+                created_at: "asc",
+              }
+            }
+          },
+        }
+      }
+    })
+  
+  }
 }
 
 const formsService = new Forms()

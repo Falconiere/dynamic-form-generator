@@ -1,4 +1,4 @@
-import { services } from "@/backend";
+import { models } from "@/backend";
 import { EditForm } from "@/domains/forms/screens/EditForm";
 import { redirect } from "next/navigation";
 
@@ -9,7 +9,7 @@ type PageProps = {
 const Page = async ({ params }: PageProps) => {
   const { id } = params;
   const [form] = await Promise.all([
-    services.forms.findById(id),
+    models.forms.findById(id),
     //fetchTotalResponsesByFormId(id),
   ]);
   try {
