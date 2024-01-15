@@ -113,7 +113,17 @@ const FormElementPreview = ({
                 key={id}
                 className="grid grid-cols-[max-content,auto] items-center gap-2"
               >
-                <input type="checkbox" id={id} value={id} />
+                <input
+                  type="checkbox"
+                  id={id}
+                  value={id}
+                  {...register(`${questionId}`, {
+                    required: {
+                      value: required,
+                      message: "This field is required",
+                    },
+                  })}
+                />
                 <Label htmlFor={id}>{label}</Label>
               </div>
             ))}

@@ -29,11 +29,10 @@ const FormPreview = ({ form, isResponse }: FormPreviewProps) => {
       data,
     });
 
-    const response = await clientApi.answers.create({
+    await clientApi.answers.create({
       form_id: form.id,
       answers,
     });
-    console.log({ response });
     // const isAnswered = await isFormAnswered({
     //   formId: form.id,
     //   email: data.email,

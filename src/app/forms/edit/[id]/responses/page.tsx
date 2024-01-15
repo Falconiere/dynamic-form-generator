@@ -1,3 +1,5 @@
+import { models } from "@/backend";
+import { Summary } from "@/domains/forms/containers/Summary";
 import { FormResponseTabsParams } from "@/domains/forms/contants/formResponseTabs";
 import { ResponsesForm } from "@/domains/forms/screens/ResponsesForm";
 
@@ -12,7 +14,11 @@ const Page = async ({ params, searchParams }: PageProps) => {
   const { id } = params;
   const page = searchParams?.page ? Number(searchParams.page) : 1;
   const tab = searchParams?.tab ?? "summary";
-  return null;
+
+  const [responses] = await Promise.all([
+    models.responseByQuestions.findByFormId(id),
+  ]);
+  return <Summary responses={responses} formId={id} />;
   // try {
   //   const [responseTotals, { data, count }] = await Promise.all([
   //     fetchTotalResponsesByFormId(id),

@@ -62,6 +62,15 @@ class Responses extends Model{
       ...answersForOptionsTextTransaction
     ])
   }
+
+  async fetchByFormId(formId: string) {
+    const response = await this.client.responses.findMany({
+      where: {
+        form_id: formId,
+      },
+    })
+    return response;
+  }
 }
 
 const responsesService = new Responses()
