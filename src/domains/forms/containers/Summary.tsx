@@ -3,27 +3,10 @@ import { FormElementType, Question } from "@/backend/types/Form";
 import { isMultipleChoiceQuestion } from "@/domains/forms/utils/isMultipleChoiceQuestion";
 import { FormMultipleChoiceChart } from "../components/FormMultipleChoiceChart";
 import { FormCheckBoxesChart } from "../components/FormCheckBoxesChart";
+import { SummaryResponse } from "@/backend/types/Responses";
 
 type SummaryProps = {
-  responses: Array<{
-    totalOfResponses: number;
-    question_options: {
-      id: string;
-      description: string | null;
-      label: string;
-      total: number;
-    }[];
-    id: string;
-    title: string;
-    description: string | null;
-    created_at: Date | null;
-    updated_at: Date | null;
-    form_id: string;
-    element_type: FormElementType;
-    required: boolean;
-    order: number;
-    formId: string;
-  }>;
+  responses: SummaryResponse[];
 };
 
 const Summary = ({ responses }: SummaryProps) => {

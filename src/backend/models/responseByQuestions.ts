@@ -1,5 +1,6 @@
 import { response_by_questions } from "@prisma/client";
 import { Model } from "../Model";
+import { SummaryResponse } from "../types/Responses";
 
 class ResponseByQuestions extends Model{
 
@@ -10,7 +11,7 @@ class ResponseByQuestions extends Model{
     })
   }
 
-  async findByFormId(form_id: string) {
+  async findByFormId(form_id: string): Promise<SummaryResponse[]> {
     const response_by_questions = this.client.response_by_questions
      const countByQuestion = await response_by_questions.groupBy({
       by: 'question_id',
@@ -55,7 +56,7 @@ class ResponseByQuestions extends Model{
       ...question,
       question_options: question.question_options?.map(option => ({
         ...option,
-        total: countByQuestionOption
+        count: countByQuestionOption
         .find(count => count.question_option_id === option.id)?._count ?? 0
       })),
       totalOfResponses: countByQuestion

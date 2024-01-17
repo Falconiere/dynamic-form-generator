@@ -1,13 +1,18 @@
-import { Form, FormElement, FormElementType, Question } from "./Form"
+import { Form, FormElementType, Option } from "./Form"
 
-type ResponsesTotal = {
-  questions: Question[];
-  totalByQuestionOption: Record<
-    string, Record<string, { count: number; label: string; element_type: FormElementType }>
-  >;
-  totalByQuestionText: Record<string, { question_text: string; count: number; element_type: FormElementType}>;
+type SummaryOptionCount = Pick<Option, "id" | "label"> & { count: number }
+type SummaryResponse = {
+  question_options: SummaryOptionCount[]
   totalOfResponses: number;
-  totalByQuestion: Record<string, number>;
+  id: string;
+  title: string;
+  description: string | null;
+  created_at: Date | null;
+  updated_at: Date | null;
+  form_id: string;
+  element_type: FormElementType
+  required: boolean;
+  order: number;
 }
 
 type IndividualResponse = {
@@ -17,4 +22,4 @@ type IndividualResponse = {
   updated_at: string;
 }
 
-export type { ResponsesTotal, IndividualResponse }
+export type { SummaryResponse,SummaryOptionCount, IndividualResponse }

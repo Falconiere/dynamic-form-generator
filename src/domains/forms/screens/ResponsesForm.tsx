@@ -1,4 +1,3 @@
-import { Form } from "@/backend/types/Form";
 import { Summary } from "../containers/Summary";
 import { FormTabs } from "../components/FormTabs";
 import { formTabs } from "../contants/formTabs";
@@ -8,10 +7,10 @@ import {
 } from "../contants/formResponseTabs";
 import { FormPaginateResponses } from "../components/FormPaginateResponses";
 import { FormPreview } from "../containers/FormPreview";
-import { IndividualResponse } from "@/backend/types/Responses";
+import { IndividualResponse, SummaryResponse } from "@/backend/types/Responses";
 
 type ResponsesFormProps = {
-  responseTotals: Form["responseTotals"];
+  summary: SummaryResponse[];
   individualResponse?: IndividualResponse | null;
   formId: string;
   count?: number | null;
@@ -19,13 +18,14 @@ type ResponsesFormProps = {
   currentPage?: number;
 };
 const ResponsesForm = ({
-  responseTotals,
+  summary,
   individualResponse,
   formId,
   count,
   currentTab,
   currentPage = 1,
 }: ResponsesFormProps) => {
+  console.log({ summary, individualResponse, formId, count, currentTab });
   return (
     <>
       <FormTabs links={formTabs(formId)} />
@@ -35,9 +35,7 @@ const ResponsesForm = ({
           className="relative pb-0 gap-0 rounded-tl-md rounded-tr-md overflow-hidden border border-solid border-gray-200 border-l-0 border-r-0 border-t-0 z-10 mb-[-3px]"
           classNameLink="shadow-none rounded-none"
         />
-        {currentTab === "summary" ? (
-          <Summary responseTotals={responseTotals} formId={formId} />
-        ) : null}
+        {currentTab === "summary" ? <Summary responses={summary} /> : null}
         {currentTab === "individual" ? (
           <>
             <FormPaginateResponses
@@ -45,7 +43,7 @@ const ResponsesForm = ({
               currentPage={currentPage}
               total={count ?? 0}
             />
-            {individualResponse?.form ? (
+            {individualResponse?.id ? (
               <FormPreview form={individualResponse.form} isResponse />
             ) : (
               <span>No individual response</span>

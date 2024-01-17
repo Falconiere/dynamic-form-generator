@@ -71,6 +71,58 @@ class Responses extends Model{
     })
     return response;
   }
+
+  async fetchByFormIdWithAnswers({formId, page}:{formId: string, page?:number}) {
+    const response = await this.client.$transaction([
+      this.client.responses.count(),
+      this.client.responses.findFirst({
+      where: {
+        form_id: formId,
+      },
+      include: {
+        form: {
+          select: {
+            title: true,
+            description: true,
+            questions: {
+              select: {
+                id: true,
+                element_type: true,
+                title: true,
+                question_options: {
+                  select: {
+                    id: true,
+                    label: true,
+                  }
+                }
+              }
+            }
+          }
+        },
+        answer_options: {
+          select: {
+            question_option_id: true,
+            response_id: true,
+          }
+        },
+        answer_texts: {
+          select: {
+            response_id: true,
+            answer: true,
+          }
+        },
+        response_by_questions: {
+          select: {
+            question_id: true,
+            response_id: true,
+          }
+        }
+      },
+      skip: page ? (page - 1) * 10 : undefined,
+      take: 1,
+    })])
+    return response;
+  }
 }
 
 const responsesService = new Responses()

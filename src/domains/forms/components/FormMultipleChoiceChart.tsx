@@ -1,23 +1,21 @@
-import { Option } from "@/backend/types/Form";
+import { SummaryOptionCount } from "@/backend/types/Responses";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 type FormMultipleChoiceChartProps = {
-  response: Array<Option & { total: number }>;
+  response: SummaryOptionCount[];
   title: string;
   total: number;
 };
 
-export const getData = (
-  response: FormMultipleChoiceChartProps["response"]
-) => ({
+export const getData = (response: SummaryOptionCount[]) => ({
   labels: response.map((r) => r.label),
   datasets: [
     {
       label: "# of Responses",
-      data: response.map((r) => r.total),
+      data: response.map((r) => r.count),
       backgroundColor: [
         "rgba(255, 99, 132, 1)",
         "rgba(54, 162, 235, 1)",
@@ -45,24 +43,22 @@ const FormMultipleChoiceChart = ({
   response,
 }: FormMultipleChoiceChartProps) => {
   return (
-    <>
-      <div className="bg-white p-4 rounded-md shadow-md">
-        <h3 className="text-xl font-bold">{title}</h3>
-        <h4 className="text-lg font-medium">{total} Responses</h4>
-        <div className="max-h-[400px] flex items-center justify-center">
-          <Pie
-            data={getData(response)}
-            options={{
-              plugins: {
-                legend: {
-                  position: "right",
-                },
+    <div className="bg-white p-4 rounded-md shadow-md">
+      <h3 className="text-xl font-bold">{title}</h3>
+      <h4 className="text-lg font-medium">{total} Responses</h4>
+      <div className="max-h-[400px] flex items-center justify-center">
+        <Pie
+          data={getData(response)}
+          options={{
+            plugins: {
+              legend: {
+                position: "right",
               },
-            }}
-          />
-        </div>
+            },
+          }}
+        />
       </div>
-    </>
+    </div>
   );
 };
 

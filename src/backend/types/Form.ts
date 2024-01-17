@@ -1,5 +1,4 @@
 import { answer_options, answer_texts, form_element_type, forms, question_options, questions } from "@prisma/client";
-import { ResponsesTotal } from "./Responses";
 
 type FormElementType = form_element_type
 
@@ -46,7 +45,6 @@ type Question = questions & {
 
 type Form = Partial<forms> & {
   questions?: Question[]
-  responseTotals?: ResponsesTotal
 }
 
 export type { Form, Question, FormElement, Option, MultipleOption, FormElementType }

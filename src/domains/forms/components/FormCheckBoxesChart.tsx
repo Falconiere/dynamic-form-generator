@@ -11,7 +11,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 
-import { Form, Option } from "@/backend/types/Form";
+import { SummaryOptionCount } from "@/backend/types/Responses";
 
 ChartJS.register(
   CategoryScale,
@@ -33,7 +33,7 @@ export const options: ChartOptions<"bar"> = {
 };
 
 type FormCheckBoxesChartProps = {
-  response: Array<Option & { total: number }>;
+  response: SummaryOptionCount[];
   title: string;
   total: number;
 };
@@ -45,27 +45,25 @@ const FormCheckBoxesChart = ({
   const labels = response.map((r) => r.label);
 
   return (
-    <>
-      <div className="bg-white p-4 rounded-md shadow-md">
-        <h3 className="text-xl font-bold">{title}</h3>
-        <h4 className="text-lg font-medium">{total} Responses</h4>
-        <div className="max-h-[400px] flex items-center justify-center">
-          <Bar
-            options={options}
-            data={{
-              labels,
-              datasets: [
-                {
-                  label: "Responses",
-                  data: response.map((r) => r.total),
-                  backgroundColor: "#2563EB",
-                },
-              ],
-            }}
-          />
-        </div>
+    <div className="bg-white p-4 rounded-md shadow-md">
+      <h3 className="text-xl font-bold">{title}</h3>
+      <h4 className="text-lg font-medium">{total} Responses</h4>
+      <div className="max-h-[400px] flex items-center justify-center">
+        <Bar
+          options={options}
+          data={{
+            labels,
+            datasets: [
+              {
+                label: "Responses",
+                data: response.map((r) => r.count),
+                backgroundColor: "#2563EB",
+              },
+            ],
+          }}
+        />
       </div>
-    </>
+    </div>
   );
 };
 
