@@ -9,7 +9,9 @@ export async function POST(request: Request) {
       headers: { "Content-Type": "application/json" }
     });
   } catch (error) {
-    console.error(error);
-    return new Response(JSON.stringify(error));
+    return new Response(JSON.stringify(error),{
+      headers: { "Content-Type": "application/json" },
+      status: 500
+    });
   }
 }

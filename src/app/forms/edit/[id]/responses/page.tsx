@@ -1,5 +1,4 @@
 import { models } from "@/backend";
-import { Summary } from "@/domains/forms/containers/Summary";
 import { FormResponseTabsParams } from "@/domains/forms/contants/formResponseTabs";
 import { ResponsesForm } from "@/domains/forms/screens/ResponsesForm";
 
@@ -15,7 +14,7 @@ const Page = async ({ params, searchParams }: PageProps) => {
   const page = searchParams?.page ? Number(searchParams.page) : 1;
   const tab = searchParams?.tab ?? "summary";
 
-  const [summary, [count, individualResponse]] = await Promise.all([
+  const [summary, individualResponse] = await Promise.all([
     models.responseByQuestions.findByFormId(id),
     models.responses.fetchByFormIdWithAnswers({ formId: id, page }),
   ]);
@@ -24,7 +23,6 @@ const Page = async ({ params, searchParams }: PageProps) => {
     <ResponsesForm
       summary={summary}
       individualResponse={individualResponse}
-      count={count}
       formId={id}
       currentTab={tab}
       currentPage={page}

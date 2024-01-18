@@ -314,13 +314,12 @@ enum factor_type {
 //  === FROM HERE IS APP SCHEMA MODELS
 
 model user_profiles {
-  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id        String           @db.Uuid
-  created_at     DateTime         @default(now()) @db.Timestamptz(6)
-  updated_at     DateTime         @default(now()) @db.Timestamptz(6)
-  users          users            @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  forms          forms[]
-  user_responses user_responses[]
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String   @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @db.Timestamptz(6)
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  forms      forms[]
 
   @@index([user_id])
   @@schema("public")
@@ -357,7 +356,6 @@ model forms {
   responses             responses[]
   answer_texts          answer_texts[]
   response_by_questions response_by_questions[]
-  user_responses        user_responses[]
 
   @@index([user_profile_id])
   @@schema("public")
@@ -442,8 +440,11 @@ model responses {
   answer_options        answer_options[]
   answer_texts          answer_texts[]
   response_by_questions response_by_questions[]
-  user_responses        user_responses[]
+  user_email            String
+  created_at            DateTime                @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime                @default(now()) @db.Timestamptz(6)
 
+  @@unique([form_id, user_email])
   @@index([form_id])
   @@schema("public")
 }
@@ -463,21 +464,5 @@ model response_by_questions {
   @@index([response_id])
   @@index([question_id])
   @@index([form_id])
-  @@schema("public")
-}
-
-model user_responses {
-  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  form_id         String        @db.Uuid
-  form            forms         @relation(fields: [form_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  user_profile_id String        @db.Uuid
-  user_profile    user_profiles @relation(fields: [user_profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  response_id String    @db.Uuid
-  response    responses @relation(fields: [response_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@index([form_id])
-  @@index([user_profile_id])
-  @@index([response_id])
   @@schema("public")
 }

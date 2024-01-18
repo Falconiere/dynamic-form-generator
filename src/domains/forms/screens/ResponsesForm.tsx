@@ -11,9 +11,8 @@ import { IndividualResponse, SummaryResponse } from "@/backend/types/Responses";
 
 type ResponsesFormProps = {
   summary: SummaryResponse[];
-  individualResponse?: IndividualResponse | null;
+  individualResponse: IndividualResponse | null;
   formId: string;
-  count?: number | null;
   currentTab: FormResponseTabsParams["currentTab"];
   currentPage?: number;
 };
@@ -21,11 +20,9 @@ const ResponsesForm = ({
   summary,
   individualResponse,
   formId,
-  count,
   currentTab,
   currentPage = 1,
 }: ResponsesFormProps) => {
-  console.log({ summary, individualResponse, formId, count, currentTab });
   return (
     <>
       <FormTabs links={formTabs(formId)} />
@@ -41,10 +38,10 @@ const ResponsesForm = ({
             <FormPaginateResponses
               formId={formId}
               currentPage={currentPage}
-              total={count ?? 0}
+              total={individualResponse?.count ?? 0}
             />
-            {individualResponse?.id ? (
-              <FormPreview form={individualResponse.form} isResponse />
+            {individualResponse ? (
+              <FormPreview individualResponse={individualResponse} isResponse />
             ) : (
               <span>No individual response</span>
             )}

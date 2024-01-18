@@ -16,7 +16,7 @@ const FormTabs = ({ links, className, classNameLink }: FormTabsProps) => {
   const pathname = usePathname();
   const isUrlActive = (path: string, isActive?: boolean) => {
     return {
-      "bg-blue-400 text-white": isActive || pathname === path,
+      "bg-blue-400 text-white": isActive ?? pathname === path,
     };
   };
   return (

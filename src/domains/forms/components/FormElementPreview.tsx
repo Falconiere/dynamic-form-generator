@@ -10,9 +10,15 @@ import {
   UseFormRegister,
   UseFormSetValue,
 } from "react-hook-form";
+import { IndividualResponse } from "@/backend/types/Responses";
+import { useCallback, useMemo } from "react";
 
 type FormElementPreviewProps = {
-  formElement: Question;
+  question:
+    | Question
+    | IndividualResponse["response"]["form"]["questions"][number];
+  answerOptions?: IndividualResponse["answer_options"];
+  answerTexts?: IndividualResponse["answer_texts"];
   register: UseFormRegister<FieldValues>;
   errors: FieldErrors<FieldValues>;
   setValue?: UseFormSetValue<FieldValues>;
@@ -21,10 +27,13 @@ type FormElementPreviewProps = {
 };
 
 const FormElementPreview = ({
-  formElement,
+  question,
+  answerOptions,
+  answerTexts,
   register,
   errors,
   setValue,
+  isResponse,
 }: FormElementPreviewProps) => {
   const {
     element_type,
@@ -32,15 +41,29 @@ const FormElementPreview = ({
     title,
     question_options = [],
     id: questionId,
-  } = formElement;
+  } = question;
 
-  const getTextResponse = () => {
-    const response = formElement?.answer_texts?.find(
-      ({ question_id }) => question_id === questionId
-    )?.answer;
+  const getTextResponse = useMemo(() => {
+    return (
+      answerTexts?.find(({ question_id }) => question_id === questionId)
+        ?.answer ?? ""
+    );
+  }, [answerTexts, questionId]);
 
-    return response?.length ? response : "-";
-  };
+  const isOptionChecked = useCallback(
+    (optionId: string) => {
+      return !!answerOptions?.find(
+        ({ question_id, question_option_id }) =>
+          question_id === questionId && question_option_id === optionId
+      );
+    },
+    [answerOptions, questionId]
+  );
+
+  const getOptionDefaultChecked = useMemo(() => {
+    return question_options?.find(({ id }) => isOptionChecked(id))?.id ?? "";
+  }, [question_options, isOptionChecked]);
+
   return (
     <div className="grid gap-2">
       <div className="flex items-center gap-2">
@@ -50,37 +73,35 @@ const FormElementPreview = ({
         </span>
       </div>
       <div className="grid gap-2">
-        {element_type === "short_text" && (
-          <>
-            <Input
-              type="text"
-              {...register(questionId, {
-                required: {
-                  value: required,
-                  message: "This field is required",
-                },
-              })}
-              error={errors?.[questionId]?.message?.toString()}
-            />
-          </>
-        )}
-        {element_type === "long_text" && (
-          <>
-            <Textarea
-              defaultValue={
-                formElement?.answer_texts?.find(
-                  ({ question_id }) => question_id === questionId
-                )?.answer
-              }
-              {...register(questionId, {
-                required: {
-                  value: required,
-                  message: "This field is required",
-                },
-              })}
-            />
-          </>
-        )}
+        {isResponse && (element_type === "long_text" || "short_text") ? (
+          <span>{getTextResponse}</span>
+        ) : null}
+
+        {element_type === "short_text" && !isResponse ? (
+          <Input
+            type="text"
+            {...register(questionId, {
+              required: {
+                value: required,
+                message: "This field is required",
+              },
+            })}
+            error={errors?.[questionId]?.message?.toString()}
+          />
+        ) : null}
+
+        {element_type === "long_text" && !isResponse ? (
+          <Textarea
+            defaultValue={getTextResponse}
+            {...register(questionId, {
+              required: {
+                value: required,
+                message: "This field is required",
+              },
+            })}
+          />
+        ) : null}
+
         {element_type === "multiple_choice_radio" && (
           <RadioGroup
             className="grid gap-2"
@@ -97,7 +118,15 @@ const FormElementPreview = ({
                 key={id}
                 className="grid grid-cols-[max-content,auto] items-center gap-2"
               >
-                <RadioGroupItem value={id as string} id={id} />
+                <RadioGroupItem
+                  value={id as string}
+                  id={id}
+                  {...{
+                    checked: isResponse
+                      ? getOptionDefaultChecked === id
+                      : undefined,
+                  }}
+                />
                 <Label htmlFor={id}>{label}</Label>
               </div>
             ))}
@@ -117,6 +146,7 @@ const FormElementPreview = ({
                   type="checkbox"
                   id={id}
                   value={id}
+                  checked={isResponse ? isOptionChecked(id) : undefined}
                   {...register(`${questionId}`, {
                     required: {
                       value: required,

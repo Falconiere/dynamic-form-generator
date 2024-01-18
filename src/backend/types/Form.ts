@@ -1,5 +1,6 @@
 import { answer_options, answer_texts, form_element_type, forms, question_options, questions } from "@prisma/client";
 
+
 type FormElementType = form_element_type
 
 type Option = Partial<question_options>
@@ -38,9 +39,7 @@ type FormElement = {
 };
 
 type Question = questions & {
-  question_options?: Partial<question_options>[]
-  answer_texts?: Partial<answer_texts>[];
-  answer_options?: Partial<answer_options>[];
+  question_options?: question_options[]
 }
 
 type Form = Partial<forms> & {

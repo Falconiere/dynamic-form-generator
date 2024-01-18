@@ -32,6 +32,22 @@
 # Implement the responses/summary:
     # Summary by questions (multiple choice checkbox) - Done
 
+# ====== (16/01/2024) ======
+# Implement the responses/summary:
+    # fix typescript errors - Done
+    # Split summary and Individual responses - Done
+    # Individual responses:
+        # Bring the form - Done
+
+# ====== (17/01/2024) ======
+# Implement the responses/summary:
+    # Collect the user's email - Done
+    # Validate if the user already answered the form - Done
+    # Individual responses:
+        # Bring the form - Done
+        # Bring the answers to the form - Done
+        # Paginate the answers - Done
+
 
 
 
