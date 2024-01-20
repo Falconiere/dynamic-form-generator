@@ -5,7 +5,7 @@ const http = {
       method: 'GET',
     }).then((response) => response.json())
   },
-  post:async (url:string, payload:any) => {
+  post:async <T>(url:string, payload:any):Promise<T> => {
     return await fetch(`${BASE_URL}${url}`, {
       method: 'POST',
       body: JSON.stringify(payload),

@@ -7,10 +7,10 @@ const formTabs = (formId:string)=>[
     href: `/forms/edit/${formId}/responses`,
     label: "Responses",
   },
-  {
-    href: `/forms/edit/${formId}/settings`,
-    label: "Setting",
-  }
+  // {
+  //   href: `/forms/edit/${formId}/settings`,
+  //   label: "Setting",
+  // }
 ]
 
 export { formTabs }

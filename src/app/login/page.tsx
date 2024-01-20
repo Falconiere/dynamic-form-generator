@@ -1,4 +1,5 @@
 import { Login } from "@/domains/auth/screens/Login";
 
-const LoginPage = () => <Login />;
-export default LoginPage;
+export default function Page() {
+  return <Login />;
+}

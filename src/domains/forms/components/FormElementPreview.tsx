@@ -121,11 +121,11 @@ const FormElementPreview = ({
                 <RadioGroupItem
                   value={id as string}
                   id={id}
-                  {...{
-                    checked: isResponse
-                      ? getOptionDefaultChecked === id
-                      : undefined,
-                  }}
+                  {...(isResponse
+                    ? {
+                        checked: getOptionDefaultChecked === id,
+                      }
+                    : undefined)}
                 />
                 <Label htmlFor={id}>{label}</Label>
               </div>

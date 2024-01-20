@@ -49,6 +49,14 @@
         # Paginate the answers - Done
 
 
+# ====== (18/01/2024) ======
+# Make the form publish public - Done
+
+# ====== (19/01/2024) ======
+
+# Implement share button (this button should create a link to share) - Done
+# Show up a message after the user send the answers - Done
+
 
 
 
