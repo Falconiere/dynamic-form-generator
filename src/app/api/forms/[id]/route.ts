@@ -24,8 +24,10 @@ export async function PATCH(request: Request,  { params }: { params: { id: strin
       user_profile_id: user.id,
     });
     revalidatePath(`/forms/edit/${id}`);
-    revalidatePath(`/forms`);
-    
+    revalidatePath("/forms","page");
+    revalidatePath("/forms#draft","page");
+    revalidatePath("/forms#published","page");
+    revalidatePath("/forms#archived","page");
     return new Response(JSON.stringify(questionOption), {
       headers: { "Content-Type": "application/json" },
     });

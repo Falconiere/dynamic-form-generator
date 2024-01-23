@@ -19,7 +19,11 @@ export async function POST(request: Request) {
       ...payload,
       user_profile_id: profile?.id
     });
-    revalidatePath("/forms");
+    revalidatePath("/forms","page");
+    revalidatePath("/forms#draft","page");
+    revalidatePath("/forms#published","page");
+    revalidatePath("/forms#archived","page");
+
     return new Response(JSON.stringify(response), {
       headers: { "Content-Type": "application/json" },
     });
