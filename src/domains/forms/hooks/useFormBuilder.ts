@@ -42,7 +42,7 @@ const useFormBuilder = ({ defaultValue }:UseFormBuilder) => {
       }
     });
     return errors;
-  }, [values?.questions]);
+  }, [values]);
 
 
   const handleAddOption = async (question: Question, option: Option) => {
