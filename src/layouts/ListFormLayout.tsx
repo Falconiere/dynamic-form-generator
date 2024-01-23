@@ -13,7 +13,7 @@ const ListFormLayout = ({ children }: ListFormLayoutProps) => {
 
   const onCreateDraft = async () => {
     setIsSubmitting(true);
-    const res = await handleOnCreateDraft();
+    const res = (await handleOnCreateDraft()) as { id: string };
     setIsSubmitting(false);
     if (!res) return;
     window.location.href = `/forms/edit/${res.id}`;

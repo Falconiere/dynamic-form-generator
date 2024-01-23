@@ -61,7 +61,9 @@ const FormElementPreview = ({
   );
 
   const getOptionDefaultChecked = useMemo(() => {
-    return question_options?.find(({ id }) => isOptionChecked(id))?.id ?? "";
+    return (
+      question_options?.find(({ id }) => id && isOptionChecked(id))?.id ?? ""
+    );
   }, [question_options, isOptionChecked]);
 
   return (
@@ -146,7 +148,7 @@ const FormElementPreview = ({
                   type="checkbox"
                   id={id}
                   value={id}
-                  checked={isResponse ? isOptionChecked(id) : undefined}
+                  checked={isResponse && id ? isOptionChecked(id) : undefined}
                   {...register(`${questionId}`, {
                     required: {
                       value: required,
