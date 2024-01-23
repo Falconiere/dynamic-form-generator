@@ -1,5 +1,6 @@
 import { models } from "@/backend";
 import { forms } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 
 export async function POST(request: Request) {
@@ -18,6 +19,7 @@ export async function POST(request: Request) {
       ...payload,
       user_profile_id: profile?.id
     });
+    revalidatePath("/forms");
     return new Response(JSON.stringify(response), {
       headers: { "Content-Type": "application/json" },
     });

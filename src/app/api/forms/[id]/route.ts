@@ -1,6 +1,7 @@
 import { models } from "@/backend";
 
 import { forms } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 export async function PATCH(request: Request,  { params }: { params: { id: string } }) {
   try {
@@ -22,6 +23,7 @@ export async function PATCH(request: Request,  { params }: { params: { id: strin
       ...body,
       user_profile_id: user.id,
     });
+    revalidatePath(`/forms/edit/${id}`);
     return new Response(JSON.stringify(questionOption), {
       headers: { "Content-Type": "application/json" },
     });
