@@ -24,6 +24,8 @@ export async function PATCH(request: Request,  { params }: { params: { id: strin
       user_profile_id: user.id,
     });
     revalidatePath(`/forms/edit/${id}`);
+    revalidatePath(`/forms`);
+    
     return new Response(JSON.stringify(questionOption), {
       headers: { "Content-Type": "application/json" },
     });
