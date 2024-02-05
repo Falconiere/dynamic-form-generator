@@ -2,6 +2,7 @@
 import { Layout } from "./components";
 import { Button } from "@/components/ui/button";
 import { handleOnCreateDraft } from "@/domains/forms/utils";
+import { useLocaleCtx } from "@/providers/LocaleProvider";
 import { useState } from "react";
 
 type ListFormLayoutProps = {
@@ -10,7 +11,7 @@ type ListFormLayoutProps = {
 
 const ListFormLayout = ({ children }: ListFormLayoutProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const { t } = useLocaleCtx();
   const onCreateDraft = async () => {
     setIsSubmitting(true);
     const res = (await handleOnCreateDraft()) as { id: string };
@@ -25,7 +26,7 @@ const ListFormLayout = ({ children }: ListFormLayoutProps) => {
         action={
           <div className="flex flex-[1] self-end items-end justify-end gap-2">
             <Button onClick={onCreateDraft}>
-              {isSubmitting ? "Creating..." : "Create"}
+              {isSubmitting ? t("creating") : t("create")}
             </Button>
           </div>
         }

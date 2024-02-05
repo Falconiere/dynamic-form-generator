@@ -7,6 +7,7 @@ import {
 import { Form } from "@/backend/types/Form";
 
 import { MoreVertical } from "lucide-react";
+import { useLocaleCtx } from "@/providers/LocaleProvider";
 
 type FormListItemMenuProps = {
   onEdit: () => void;
@@ -20,6 +21,7 @@ const FormListItemMenu = ({
   onChangeStatus,
   status,
 }: FormListItemMenuProps) => {
+  const { t } = useLocaleCtx();
   const nextStatus = status === "published" ? "archived" : "published";
   return (
     <DropdownMenu>
@@ -28,16 +30,16 @@ const FormListItemMenu = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem onClick={onEdit} className="cursor-pointer">
-          Edit
+          {t("edit")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onPreview} className="cursor-pointer">
-          Preview
+          {t("preview")}
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => onChangeStatus(nextStatus)}
           className="cursor-pointer capitalize"
         >
-          {status === "published" ? "Archive" : "Publish"}
+          {status === "published" ? t("archive") : t("publish")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

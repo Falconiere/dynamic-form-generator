@@ -2,6 +2,8 @@ import { cn } from "@/utils/utils";
 import { Form } from "@/backend/types/Form";
 import { FormListItemMenu } from "./FormListItemMenu";
 import { format } from "date-fns";
+import { useLocaleCtx } from "@/providers/LocaleProvider";
+import { LocalePath } from "@/locales/types";
 
 type FormListItemProps = {
   form: Form;
@@ -15,6 +17,7 @@ const FormListItem = ({
   onEdit,
   onPreview,
 }: FormListItemProps) => {
+  const { t } = useLocaleCtx();
   const { id, title, status, created_at } = form;
   return (
     <tr
@@ -29,7 +32,7 @@ const FormListItem = ({
           "text-red-500": status === "archived",
         })}
       >
-        {status}
+        {t(`forms.status.${status}` as LocalePath)}
       </td>
       <td className="text-right">
         {created_at ? format(new Date(created_at), "MMM dd yyyy") : null}

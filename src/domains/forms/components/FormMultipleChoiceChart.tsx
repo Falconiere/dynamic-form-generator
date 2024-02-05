@@ -1,4 +1,5 @@
 import { SummaryOptionCount } from "@/backend/types/Responses";
+import { useLocaleCtx } from "@/providers/LocaleProvider";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 
@@ -42,10 +43,13 @@ const FormMultipleChoiceChart = ({
   total,
   response,
 }: FormMultipleChoiceChartProps) => {
+  const { t } = useLocaleCtx();
   return (
     <div className="bg-white p-4 rounded-md shadow-md">
       <h3 className="text-xl font-bold">{title}</h3>
-      <h4 className="text-lg font-medium">{total} Responses</h4>
+      <h4 className="text-lg font-medium">
+        {total} {t("responses.Responses")}
+      </h4>
       <div className="max-h-[400px] flex items-center justify-center">
         <Pie
           data={getData(response)}

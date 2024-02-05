@@ -1,3 +1,4 @@
+"use client";
 import { Summary } from "../containers/Summary";
 import { FormTabs } from "../components/FormTabs";
 import { formTabs } from "../contants/formTabs";
@@ -8,6 +9,7 @@ import {
 import { FormPaginateResponses } from "../components/FormPaginateResponses";
 import { FormPreview } from "../containers/FormPreview";
 import { IndividualResponse, SummaryResponse } from "@/backend/types/Responses";
+import { useLocaleCtx } from "@/providers/LocaleProvider";
 
 type ResponsesFormProps = {
   summary: SummaryResponse[];
@@ -23,12 +25,13 @@ const ResponsesForm = ({
   currentTab,
   currentPage = 1,
 }: ResponsesFormProps) => {
+  const { lang } = useLocaleCtx();
   return (
     <>
       <FormTabs links={formTabs(formId)} />
       <div>
         <FormTabs
-          links={formResponseTabs({ formId, currentTab })}
+          links={formResponseTabs({ formId, currentTab, lang })}
           className="relative pb-0 gap-0 rounded-tl-md rounded-tr-md overflow-hidden border border-solid border-gray-200 border-l-0 border-r-0 border-t-0 z-10 mb-[-3px]"
           classNameLink="shadow-none rounded-none"
         />

@@ -4,12 +4,14 @@ import { Layout } from "./components";
 import { Button } from "@/components/ui/button";
 import { NEXT_PUBLIC_APP_URL } from "@/constants/constants";
 import { useToast } from "@/components/ui/use-toast";
+import { useLocaleCtx } from "@/providers/LocaleProvider";
 type PreviewLayoutProps = {
   children: React.ReactNode;
 };
 
 const PreviewLayout = ({ children }: PreviewLayoutProps) => {
   const { toast } = useToast();
+  const { t } = useLocaleCtx();
   const params = useParams() as { id: string };
   const formUrl = `${NEXT_PUBLIC_APP_URL}/forms/${params.id}`;
 
@@ -25,7 +27,7 @@ const PreviewLayout = ({ children }: PreviewLayoutProps) => {
       <Layout.Header
         action={
           <div className="flex flex-[1] self-end items-end justify-end gap-2">
-            <Button onClick={onClipboardCopy}>Copy Link</Button>
+            <Button onClick={onClipboardCopy}>{t("copyLink")}</Button>
           </div>
         }
       />

@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "npx prisma generate && npx next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prisma:create": "dotenv -e .env.local -- npx prisma migrate dev --create-only",
+    "prisma:migrate": "dotenv -e .env.local -- npx prisma migrate dev && npx prisma generate",
+    "prisma:generate": "dotenv -e .env.local -- npx prisma generate"
   },
   "dependencies": {
     "-": "^0.0.1",

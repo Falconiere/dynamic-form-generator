@@ -12,6 +12,7 @@ import {
 import { Form } from "@/backend/types/Form";
 import { FormTabs } from "@/domains/forms/components/FormTabs";
 import { formTabs } from "@/domains/forms/contants/formTabs";
+import { useLocaleCtx } from "@/providers/LocaleProvider";
 
 type FormLayoutProps = {
   children: React.ReactNode;
@@ -22,6 +23,7 @@ const FormLayout = ({ children }: FormLayoutProps) => {
     isSubmitting,
     values: { id },
   } = useFormBuilderContext();
+  const { t } = useLocaleCtx();
   return (
     <DndProvider backend={HTML5Backend}>
       <Layout.Wrapper>
@@ -29,10 +31,10 @@ const FormLayout = ({ children }: FormLayoutProps) => {
           action={
             <div className="flex flex-[1] self-end items-end justify-end gap-2">
               <Link href={`/forms/preview/${id}`} target="_blank">
-                <Button variant="secondary">Preview</Button>
+                <Button variant="secondary">{t("preview")}</Button>
               </Link>
               <Button onClick={handleOnSubmit} type="button">
-                {isSubmitting ? "Saving..." : "Publish"}
+                {isSubmitting ? t("saving") : t("publish")}
               </Button>
             </div>
           }

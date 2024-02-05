@@ -53,7 +53,11 @@ class Forms extends Model {
   }
 
   async fetchAll() {
+    const userProfiles = await models.userProfiles.get()
     return await this.client.forms.findMany({
+      where: {
+        user_profile_id: userProfiles?.id
+      },
       include: {
         questions: {
           orderBy: {

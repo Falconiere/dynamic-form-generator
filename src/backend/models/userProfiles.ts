@@ -4,9 +4,9 @@ import { getCurrentUser } from "../getCurrentUser"
 class UserProfiles extends Model {
   async get() {
     const user = await getCurrentUser()
-    return await this.client.user_profiles.findFirst({
-      where: {
-        user_id: user.id,
+    return await this.client.user_profiles.findFirstOrThrow({ 
+      where:{
+        user_id: user?.id,
       }
     })
   }

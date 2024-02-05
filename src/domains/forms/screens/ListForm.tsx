@@ -7,6 +7,7 @@ import { cn } from "@/utils/utils";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { forms } from "@prisma/client";
+import { useLocaleCtx } from "@/providers/LocaleProvider";
 
 type ListFormProps = {
   forms?: forms[];
@@ -36,6 +37,7 @@ const ListForm = ({ forms }: ListFormProps) => {
   const publishedForms = forms?.filter((form) => form.status === "published");
   const draftForms = forms?.filter((form) => form.status === "draft");
   const archivedForms = forms?.filter((form) => form.status === "archived");
+  const { t } = useLocaleCtx();
 
   useEffect(() => {
     const hash = window.location.hash.replace("#", "") ?? "published";
@@ -57,19 +59,19 @@ const ListForm = ({ forms }: ListFormProps) => {
           onClick={() => handleChangeTab("published")}
           active={activeTab === "published"}
         >
-          Published ({publishedForms?.length})
+          {t("forms.tabs.published")} ({publishedForms?.length})
         </Tab>
         <Tab
           onClick={() => handleChangeTab("draft")}
           active={activeTab === "draft"}
         >
-          Draft ({draftForms?.length})
+          {t("forms.tabs.draft")} ({draftForms?.length})
         </Tab>
         <Tab
           onClick={() => handleChangeTab("archived")}
           active={activeTab === "archived"}
         >
-          Archived ({archivedForms?.length})
+          {t("forms.tabs.archived")} ({archivedForms?.length})
         </Tab>
       </div>
       {isLoaded ? (
