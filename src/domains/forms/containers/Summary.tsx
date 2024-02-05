@@ -1,20 +1,25 @@
 "use client";
-import { FormElementType, Question } from "@/backend/types/Form";
 import { isMultipleChoiceQuestion } from "@/domains/forms/utils/isMultipleChoiceQuestion";
 import { FormMultipleChoiceChart } from "../components/FormMultipleChoiceChart";
 import { FormCheckBoxesChart } from "../components/FormCheckBoxesChart";
 import { SummaryResponse } from "@/backend/types/Responses";
+import { useLocaleCtx } from "@/providers/LocaleProvider";
 
 type SummaryProps = {
   responses: SummaryResponse[];
 };
 
 const Summary = ({ responses }: SummaryProps) => {
-  console.log({ responses });
-  const questions = responses;
+  const { t } = useLocaleCtx();
+  if (responses.length === 0)
+    return (
+      <div className="flex items-center p-10">
+        <h3 className="m-auto font-semibold">{t("noResponses")}</h3>
+      </div>
+    );
   return (
     <div className="grid gap-4">
-      {questions.map(
+      {responses.map(
         ({ element_type, id, title, question_options, totalOfResponses }) => (
           <div className="grid gap-4" key={id}>
             {isMultipleChoiceQuestion(element_type) ? (

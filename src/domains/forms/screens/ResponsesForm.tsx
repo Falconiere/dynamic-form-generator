@@ -25,7 +25,8 @@ const ResponsesForm = ({
   currentTab,
   currentPage = 1,
 }: ResponsesFormProps) => {
-  const { lang } = useLocaleCtx();
+  const { lang, t } = useLocaleCtx();
+
   return (
     <>
       <FormTabs links={formTabs(formId)} />
@@ -38,15 +39,22 @@ const ResponsesForm = ({
         {currentTab === "summary" ? <Summary responses={summary} /> : null}
         {currentTab === "individual" ? (
           <>
-            <FormPaginateResponses
-              formId={formId}
-              currentPage={currentPage}
-              total={individualResponse?.count ?? 0}
-            />
-            {individualResponse ? (
-              <FormPreview individualResponse={individualResponse} isResponse />
+            {individualResponse?.response ? (
+              <>
+                <FormPaginateResponses
+                  formId={formId}
+                  currentPage={currentPage}
+                  total={individualResponse?.count ?? 0}
+                />
+                <FormPreview
+                  individualResponse={individualResponse}
+                  isResponse
+                />
+              </>
             ) : (
-              <span>No individual response</span>
+              <div className="flex items-center p-10">
+                <h3 className="m-auto font-semibold">{t("noResponses")}</h3>
+              </div>
             )}
           </>
         ) : null}

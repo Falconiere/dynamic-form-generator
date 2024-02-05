@@ -82,7 +82,7 @@ class Responses extends Model{
       },
     });
 
-    const response = await this.client.responses.findFirstOrThrow({
+    const response = await this.client.responses.findFirst({
       orderBy:{
         created_at: 'desc',
       },
@@ -123,11 +123,11 @@ class Responses extends Model{
       take: 1,
     })
 
-    const questionIds = response.form.questions.map(question => question.id);
+    const questionIds = response?.form.questions.map(question => question.id);
     const answer_options = await this.client.answer_options.findMany({
       where: {
         form_id: formId,
-        response_id: response.id,
+        response_id: response?.id,
         question_id: {
           in: questionIds,
         }
@@ -136,7 +136,7 @@ class Responses extends Model{
     const answer_texts = await this.client.answer_texts.findMany({
       where: {
         form_id: formId,
-        response_id: response.id,
+        response_id: response?.id,
         question_id: {
           in: questionIds,
         }
@@ -144,6 +144,7 @@ class Responses extends Model{
     })
     return { count, response, answer_options, answer_texts }
   }
+  
   async isUserAlreadyAnswered({form_id, user_email}: {form_id: string, user_email: string}) {
     const response = await this.client.responses.findFirst({
       where: {
