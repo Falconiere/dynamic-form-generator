@@ -37,6 +37,7 @@ const lang = {
   logout:"Logout",
   saving:"Saving...",
   copyLink:"Copy Link",
+  linkCopied:"Form link copied to clipboard",
   noResponses:"No responses found",
   forms:{
     

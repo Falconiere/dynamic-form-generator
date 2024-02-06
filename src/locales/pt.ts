@@ -37,6 +37,7 @@ const lang = {
   logout:"Deslogar",
   saving:"Salvando...",
   copyLink:"Copiar Link",
+  linkCopied:"Link do formulário copiado!",
   noResponses:"Nenhuma resposta encontrada",
   forms:{
     dialogMessage:{

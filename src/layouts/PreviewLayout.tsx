@@ -18,7 +18,7 @@ const PreviewLayout = ({ children }: PreviewLayoutProps) => {
   const onClipboardCopy = () => {
     navigator.clipboard.writeText(formUrl);
     toast({
-      title: "Form link copied to clipboard",
+      title: t("linkCopied"),
     });
   };
 
