@@ -4,11 +4,6 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 
-const PRIVATE_URL = [
-  "/forms",
-  "/forms/preview",
-]
-
 const AUTH_URL = [
   "/login",
   "/signup"
@@ -18,10 +13,6 @@ const PUBLIC_URL = [
   "/forms/:id",
 ]
 
-const matchPrivateUrlByRegex = (pathname: string) => {
-  const regex = new RegExp(PRIVATE_URL.join('|'))
-  return regex.test(pathname)
-}
 
 // Match public url by regex that use a UUID
 const matchPublicUrlByRegex = (pathname: string) => {

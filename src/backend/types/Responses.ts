@@ -42,7 +42,7 @@ type IndividualResponse = {
       id: string;
       form_id: string;
       user_email: string;
-  };
+  } | null;
   answer_options: {
       id: string;
       created_at: Date | null;

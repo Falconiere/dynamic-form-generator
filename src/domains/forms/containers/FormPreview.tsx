@@ -90,7 +90,7 @@ const FormPreview = ({
           ) : (
             <p>
               <strong>Answers from:</strong>{" "}
-              {individualResponse?.response.user_email}
+              {individualResponse?.response?.user_email}
             </p>
           )}
         </div>

@@ -1,4 +1,4 @@
-const BASE_URL = window.location.origin;
+const BASE_URL = typeof window !== "undefined" ? window.location.origin : 'http://localhost:3000';
 const http = {
   get:async (url:string) => {
     return await fetch(`${BASE_URL}${url}`, {

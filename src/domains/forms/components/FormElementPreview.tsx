@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { Question } from "@/backend/types/Form";
+import { FormElementType, Question } from "@/backend/types/Form";
 import {
   FieldErrors,
   FieldValues,
@@ -13,10 +13,20 @@ import {
 import { IndividualResponse } from "@/backend/types/Responses";
 import { useCallback, useMemo } from "react";
 
+type Questions = {
+  id: string;
+  title: string;
+  order: number;
+  element_type: FormElementType;
+  required: boolean;
+  question_options: {
+    id: string;
+    label: string;
+  }[];
+};
+
 type FormElementPreviewProps = {
-  question:
-    | Question
-    | IndividualResponse["response"]["form"]["questions"][number];
+  question: Question | Questions;
   answerOptions?: IndividualResponse["answer_options"];
   answerTexts?: IndividualResponse["answer_texts"];
   register: UseFormRegister<FieldValues>;

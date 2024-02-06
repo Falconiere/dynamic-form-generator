@@ -1,4 +1,5 @@
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
+import { UserResponse } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 
 const getSupabase = () => {
@@ -7,10 +8,9 @@ const getSupabase = () => {
   return supabase;
 }
 
-const getCurrentUser = async () => {
+const getCurrentUser = async (): Promise<UserResponse["data"]["user"]> => {
   const supabase = getSupabase();
   const { data: { user } } = await supabase.auth.getUser()
-  if(!user?.id) throw new Error("User not found")
   return user;
 }
 
