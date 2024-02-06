@@ -1,6 +1,4 @@
-import { NEXT_PUBLIC_APP_URL } from "@/constants/constants"
-
-const BASE_URL = NEXT_PUBLIC_APP_URL
+const BASE_URL = window.location.origin;
 const http = {
   get:async (url:string) => {
     return await fetch(`${BASE_URL}${url}`, {
