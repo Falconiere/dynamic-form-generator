@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npx prisma generate && npx next build",
+    "build": "npx prisma migrate dev && npx prisma generate && npx next build",
     "start": "next start",
     "lint": "next lint",
     "prisma:create": "dotenv -e .env.local -- npx prisma migrate dev --create-only",
